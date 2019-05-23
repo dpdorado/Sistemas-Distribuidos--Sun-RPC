@@ -5,15 +5,19 @@
  */
 
 #include "servicio_inicio_sesion.h"
+#include "./librerias/std_is.h"
 
 int *
 iniciar_sesion_is_1_svc(datos_login_is *argp, struct svc_req *rqstp)
 {
-	static int  result;
+	static int  result;	
+	retorno_is *ret;
+	
+	ret=(retorno_is*)malloc(sizeof(retorno_is));
 
-	/*
-	 * insert server code here
-	 */
+	ret=logeo(argp, "./../informacion/usuarios.dat", "./../informacion/admin.dat");
+
+	result=ret->tipo_user;
 
 	return &result;
 }
@@ -22,10 +26,9 @@ char **
 cabiar_contrasenia_is_1_svc(datos_cambio_contrsenia_is *argp, struct svc_req *rqstp)
 {
 	static char * result;
-
-	/*
-	 * insert server code here
-	 */
+	
+	result=(char*)malloc(sizeof(char)*50);
+	strcpy(result,modify_password_admin(argp, "./../informacion/admin.dat"));
 
 	return &result;
 }

@@ -5,15 +5,16 @@
  */
 
 #include "servicios_jd.h"
+#include "./librerias/std_jd.h"
 
 char **
 registrar_usuario_jd_1_svc(usuario_jd *argp, struct svc_req *rqstp)
 {
 	static char * result;
-
-	/*
-	 * insert server code here
-	 */
+	
+	result=(char*)malloc(sizeof(char)*50);
+	
+	strcpy(result,register_user(argp, "./../informacion/usuarios.dat"));
 
 	return &result;
 }
@@ -23,9 +24,9 @@ registrar_anteproyecto_jd_1_svc(anteproyecto_jd *argp, struct svc_req *rqstp)
 {
 	static char * result;
 
-	/*
-	 * insert server code here
-	 */
+	result=(char*)malloc(sizeof(char)*50);
+	
+	strcpy(result,register_user(argp, "./../informacion/anteproyectos.dat"));
 
 	return &result;
 }
@@ -35,9 +36,9 @@ asignar_evaluadores_jd_1_svc(evaluadores_jd *argp, struct svc_req *rqstp)
 {
 	static char * result;
 
-	/*
-	 * insert server code here
-	 */
+	result=(char*)malloc(sizeof(char)*50);
+	
+	strcpy(result,register_user(argp, "./../informacion/evaluadores.dat"));
 
 	return &result;
 }
@@ -45,23 +46,30 @@ asignar_evaluadores_jd_1_svc(evaluadores_jd *argp, struct svc_req *rqstp)
 anteproyecto_completo_jd *
 buscar_anteproyecto_jd_1_svc(char **argp, struct svc_req *rqstp)
 {
-	static anteproyecto_completo_jd  result;
+	static anteproyecto_completo_jd  *result;
 
-	/*
-	 * insert server code here
-	 */
+	result=(anteproyecto_completo_jd*)malloc(sizeof(anteproyecto_completo_jd));
+	
+	result = search_graft(*argp, "./../informacion/anteproyectos.dat","./../informacion/evaluadores.dat");
 
-	return &result;
+	return result;
 }
 
 char **
 modificar_concepto_anteproyecto_jd_1_svc(datos_concepto_jd *argp, struct svc_req *rqstp)
 {
 	static char * result;
-
-	/*
-	 * insert server code here
-	 */
+	int concept=0;
+	
+	if (strcmp("APROBADO", argp->concepto)==0){
+		concept=1;
+	}else if(strcmp("NO_APROBADO", argp->concepto)==0){
+		concept=2;
+	}	
+	
+	result=(char*)malloc(sizeof(char)*50);
+	
+	strcpy(result,modify_concept_draft(argp->codigo_proyecto,concept, "./../informacion/anteproyectos.dat"));
 
 	return &result;
 }

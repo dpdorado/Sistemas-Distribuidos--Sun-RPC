@@ -5,27 +5,28 @@
  */
 
 #include "servicios_ed.h"
+#include "./librerias/std_ed.h"
 
 anteproyecto_ed *
 buscar_anteproyecto_ed_1_svc(char **argp, struct svc_req *rqstp)
 {
-	static anteproyecto_ed  result;
+	static anteproyecto_ed  *result;
 
-	/*
-	 * insert server code here
-	 */
+	result=(anteproyecto_ed*)malloc(sizeof(anteproyecto_ed));
+	
+	result = search_graft(*argp, "./../informacion/anteproyectos.dat");
 
-	return &result;
+	return result;
 }
 
 nodo_anteproyecto_ed *
 listar_anteproyectos_ed_1_svc(void *argp, struct svc_req *rqstp)
 {
-	static nodo_anteproyecto_ed  result;
+	static nodo_anteproyecto_ed * result;
 
-	/*
-	 * insert server code here
-	 */
+	result=(nodo_anteproyecto_ed*)malloc(sizeof(nodo_anteproyecto_ed));
+	
+	result=list_draft("./../informacion/anteproyectos.dat");
 
-	return &result;
+	return result;
 }

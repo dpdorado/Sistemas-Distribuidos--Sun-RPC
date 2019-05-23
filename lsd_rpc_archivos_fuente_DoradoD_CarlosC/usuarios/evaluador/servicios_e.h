@@ -15,10 +15,13 @@ extern "C" {
 
 #define MAXCODA_e 3
 #define MAXCONC_e 20
+#define MAXFEC_e 10
 
 struct datos_concepto_e {
 	char codigo_proyecto[MAXCODA_e];
 	char concepto[MAXCONC_e];
+	char fecha[MAXFEC_e];
+	int eval_numero;
 };
 typedef struct datos_concepto_e datos_concepto_e;
 

@@ -17,5 +17,10 @@ xdr_datos_concepto_e (XDR *xdrs, datos_concepto_e *objp)
 	 if (!xdr_vector (xdrs, (char *)objp->concepto, MAXCONC_e,
 		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
+	 if (!xdr_vector (xdrs, (char *)objp->fecha, MAXFEC_e,
+		sizeof (char), (xdrproc_t) xdr_char))
+		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->eval_numero))
+		 return FALSE;
 	return TRUE;
 }

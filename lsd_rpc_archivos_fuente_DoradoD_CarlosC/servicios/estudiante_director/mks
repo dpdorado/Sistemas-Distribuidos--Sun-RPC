@@ -9,7 +9,7 @@ SERVER = servidor_ed
 SOURCES_CLNT.c = 
 SOURCES_CLNT.h = 
 SOURCES_SVC.c = servidor_ed.c 
-SOURCES_SVC.h = servicios_ed.h
+SOURCES_SVC.h = servicios_ed.h 
 SOURCES.x = servicios_ed.x
 
 TARGETS_SVC.c = servicios_ed_svc.c   servicios_ed_xdr.c 

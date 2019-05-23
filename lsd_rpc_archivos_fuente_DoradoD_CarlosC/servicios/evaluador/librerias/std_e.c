@@ -1,0 +1,53 @@
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "std_e.h"
+#include "./../servicios_e.h"
+ 
+
+//Modifica el concepto de un anteproyecto
+char * modify_concept_eval(datos_concepto_e *datas,char* path_eval){
+	static char* messaje;
+	evaluadores_e *eval;
+	FILE *file;
+
+	massaje = (char*)malloc(sizeof(char)*50);
+	strcpy(messaje,"Concepto no modificado.");
+	
+	file=fopen(path_eval,"r+b");
+	if (file==NULL){
+		return messaje;
+	}
+
+	eval=(evaluadores_e*)malloc(sizeof(evaluadores_e));
+
+	fread(eval, sizeof(evaluadores_e), 1, file);
+
+	while(!feof(file)){
+		if (strcmp(datas->codigo_proyecto,eval->codigo_anteproyecto)==0){
+			int pos = ftell(file)-sizeof(evaluadores_e);
+			fseek(file,pos,SEEK_SET);
+			if (datas->eval_numero==1){
+				strcpy(eval->concepto=concepto_evaluador1,datas->concepto);
+				strcpy(eval->concepto=fecha_revision1,datas->fecha);
+			}else {
+				strcpy(eval->concepto=concepto_evaluador2,datas->concepto);
+				strcpy(eval->concepto=fecha_revision2,datas->fecha);
+			}
+			
+			fwrite(eval, sizeof(evaluadores_e), 1, file);
+			strcpy(messaje,"Se modifico elconcepto.");
+			fclose(file);
+			return messaje;
+		}
+		fread(eval, sizeof(evaluadores_e), 1, file);
+	}
+	fclose(file);
+	return messaje;
+	
+}
+
+
+
+

@@ -5,15 +5,16 @@
  */
 
 #include "servicios_e.h"
+#include "./librerias/std_e.h"
 
 char **
 ingresar_concepto_anteproyecto_e_1_svc(datos_concepto_e *argp, struct svc_req *rqstp)
 {
 	static char * result;
-
-	/*
-	 * insert server code here
-	 */
+	
+	result =(char*)malloc(sizeof(char)*50);
+	
+	strcpy(result, modify_concept_eval(argp,"./../informacion/evaluadores.dat"));
 
 	return &result;
 }
