@@ -12,7 +12,7 @@ char * modify_concept_eval(datos_concepto_e *datas,char* path_eval){
 	evaluadores_e *eval;
 	FILE *file;
 
-	massaje = (char*)malloc(sizeof(char)*50);
+	messaje = (char*)malloc(sizeof(char)*50);
 	strcpy(messaje,"Concepto no modificado.");
 	
 	file=fopen(path_eval,"r+b");
@@ -29,11 +29,11 @@ char * modify_concept_eval(datos_concepto_e *datas,char* path_eval){
 			int pos = ftell(file)-sizeof(evaluadores_e);
 			fseek(file,pos,SEEK_SET);
 			if (datas->eval_numero==1){
-				strcpy(eval->concepto=concepto_evaluador1,datas->concepto);
-				strcpy(eval->concepto=fecha_revision1,datas->fecha);
+				strcpy(eval->concepto_evaluador1,datas->concepto);
+				strcpy(eval->fecha_revision1,datas->fecha);
 			}else {
-				strcpy(eval->concepto=concepto_evaluador2,datas->concepto);
-				strcpy(eval->concepto=fecha_revision2,datas->fecha);
+				strcpy(eval->concepto_evaluador2,datas->concepto);
+				strcpy(eval->fecha_revision2,datas->fecha);
 			}
 			
 			fwrite(eval, sizeof(evaluadores_e), 1, file);
