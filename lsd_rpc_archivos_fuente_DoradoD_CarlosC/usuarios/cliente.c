@@ -105,6 +105,7 @@ void limpiar(){
 }
 //Pone en espera la consola hasta que se oprima una tecla
 void espera(){
+	printf("\nPresione enter para continua...");
 	getchar();
 	getchar();
 }
@@ -123,7 +124,8 @@ void menu_jd(char *user){
 	printf("   4. Buscar anteproyecto.\n");
 	printf("   5. Listar anteproyectos.\n");
 	printf("   6. Modificar concepto de anteproyecto.\n");
-	printf("   7. Cerrar Sesion.\n");
+	printf("   7. Modificar concepto de anteproyecto.\n");
+	printf("   8. Cerrar Sesion.\n");
 }
 //Permite ingresar los datos de un usuario al jefede departamento
 void pedir_datos_usuario(char* user){
@@ -139,8 +141,27 @@ void pedir_datos_usuario(char* user){
 	scanf("%10s", datos_reg_user->nom_user);
 	printf("Contraseña: ");
 	scanf("%10s", datos_reg_user->contrasenia);
-	printf("Jefe Deepartamento(1),Estudiante-Direcator(2), Evaluador(3): ");
-	scanf("%d", datos_reg_user->tipo_user);	
+	
+	// Validamos que elija una de las opciones correctas
+	int tipo = 0;
+	do{
+		printf("Jefe Deepartamento(1),Estudiante-Direcator(2), Evaluador(3): ");
+		//scanf("%d", &datos_reg_user->tipo_user);	
+		scanf("%d", &tipo);	
+		if (tipo != 1 && tipo != 2 && tipo != 3)
+		{
+			printf("\nError, debe elegir un valor correcto. [1, 2, 3]\n\n");
+			printf("Elija una opcion de las siguientes.\n");
+		}
+
+	}while (tipo != 1 && tipo != 2 && tipo != 3);
+	datos_reg_user->tipo_user = tipo;
+
+	/* printf("id: %s \n", datos_reg_user->identificacion);
+	printf("NombreApellido %s \n", datos_reg_user->nombre_apellido);
+	printf("NombreUser %s \n", datos_reg_user->nom_user);
+	printf("Pass %s \n", datos_reg_user->contrasenia);
+	printf("Tipo %d \n", datos_reg_user->tipo_user); */
 
 }
 
@@ -191,10 +212,10 @@ void pedir_datos_anteproyecto(char* user){
 }
 //Pide al jp los datos del anteproyectos
 void registrar_anteproyecto(char* user){
-/*result_2 = registrar_anteproyecto_jd_1(&registrar_anteproyecto_jd_1_arg, clnt);
-	if (result_2 == (char **) NULL) {
-		clnt_perror (clnt, "call failed");
-	}*/
+	result2_jd = registrar_anteproyecto_jd_1(&registrar_anteproyecto_jd_1_arg, clnt_jd);
+		if (result2_jd == (char **) NULL) {
+			clnt_perror (clnt_jd, "call failed");
+		}
 }
 void asignar_evaluadores(char* user){
 /*result_3 = asignar_evaluadores_jd_1(&asignar_evaluadores_jd_1_arg, clnt);
@@ -224,10 +245,10 @@ void iniciar_menu_jd(char *user){
 		opcion=ingresar_opcion();
 		switch(opcion){
 			case 1:
-				//registrar_usuario(user);
+				registrar_usuario(user);
 				break;	
 			case 2:
-				//registrar_anteproyecto(user);
+				registrar_anteproyecto(user);
 				break;
 			case 3:
 				//asignar_evaluadores(user);
@@ -371,10 +392,13 @@ void iniciar_sesion(){
 		result1_is = iniciar_sesion_is_1(&datos_usuario, clnt_is);	
 		if (result1_is == (int *) NULL) {
 			clnt_perror (clnt_is, "call failed");
-		}else if (iniciar_sesiones(*result1_is,datos_usuario.nom_user)==-1){
+		}else if (iniciar_sesiones(1,"dodaniel")==-1){
+			printf("Datos incorrectos..\n");
+	
 			printf("1-> volver a intentarlo\n");
 			printf("2-> regresar\n");
 			bandera = ingresar_opcion();
+		}else if (iniciar_sesiones(*result1_is,datos_usuario.nom_user)==-1){
 			//scanf("%d",&bandera);
 		}else{
 			printf("Inicio correcto\n");
