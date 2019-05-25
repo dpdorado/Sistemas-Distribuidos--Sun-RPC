@@ -8,24 +8,321 @@
 #include "./jefe_departamento/servicios_jd.h"
 #include "./estudiante_director/servicios_ed.h"
 #include "./evaluador/servicios_e.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-void
-prog_servicio(char *host)
-{
+
+/*Colocar los clinetes de forma global??????*/
+/*-------------------------------Variables globales------------------*/
+char *host;
+
+//----Inicio de Sesion.
+CLIENT *clnt_is;
+int  *result1_is;
+datos_login_is  datos_usuario;
+
+char **result2_is;
+datos_cambio_contrsenia_is  datos_cambio_contrasenia_is;
+/*//utilizar para el cambio de contrasenia<----------------------se debe copiar de todos los demas clinetes tambien
+result_2 = cabiar_contrasenia_is_1(&datos_cambio_contrasenia_is, clnt);
+	if (result_2 == (char **) NULL) {
+		clnt_perror (clnt, "call failed");
+}*/
+//----Jefe de Departamento
+CLIENT *clnt_jd;
+char **result1_jd;
+usuario_jd  registrar_usuario_jd_1_arg;
+char * *result2_jd;
+anteproyecto_jd  registrar_anteproyecto_jd_1_arg;
+char * *result3_jd;
+evaluadores_jd  asignar_evaluadores_jd_1_arg;
+anteproyecto_completo_jd  *result4_jd;
+char * buscar_anteproyecto_jd_1_arg;
+char * *result5_jd;
+datos_concepto_jd  modificar_concepto_anteproyecto_jd_1_arg;
+//----Estudiante- Director
+CLIENT *clnt_ed;
+anteproyecto_ed  *result1_ed;
+char * buscar_anteproyecto_ed_1_arg;
+nodo_anteproyecto_ed  *result2_ed;
+char *listar_anteproyectos_ed_1_arg;
+//----Evaluadores
+CLIENT *clnt_e;
+char * *result1_e;
+datos_concepto_e  ingresar_concepto_anteproyecto_e_1_arg;
+
+//*Crear clientes*//
+void crear_clientes(){
+	//Inicio de sesion
+	clnt_is = clnt_create (host, inicio_sesion, inicio_sesion_version, "udp");
+	if (clnt_is == NULL) {
+		clnt_pcreateerror (host);
+		exit (1);
+	}
+	//Jefe de Departameto
+	clnt_jd = clnt_create (host, jefe_departamento, jefe_departamento_version, "udp");
+	if (clnt_jd == NULL) {
+		clnt_pcreateerror (host);
+		exit (1);
+	}
+	//Estudiante-Director
+	clnt_ed = clnt_create (host, estudiante_director, estudiante_director_version, "udp");
+	if (clnt_ed == NULL) {
+		clnt_pcreateerror (host);
+		exit (1);
+	}
+	//Evaluadores
+	clnt_e = clnt_create (host, evaluador, evaluador_version, "udp");
+	if (clnt_e == NULL) {
+		clnt_pcreateerror (host);
+		exit (1);
+	}
+}
+void destruir_clientes(){
+	//Inicio de sesio
+	clnt_destroy (clnt_is);	
+	//Jefe de  Departamento
+	clnt_destroy (clnt_jd);	
+	//Estudiante Director
+	clnt_destroy (clnt_ed);
+	//Evaluador
+	clnt_destroy (clnt_e);
+}
+
+/*--------------------------------Metodos genericos--------------------------------*/
+//Permite al ussuario ungresar una opcion.
+int ingresar_opcion(){
+	//validar que no sea una cadena--
+	int opcion=0;
+	printf("ingrese la opcion:  ");
+	scanf("%d",&opcion);
+	return opcion;
+}
+//limpia la consola.
+void limpiar(){
+	system("clear");
+}
+//Pone en espera la consola hasta que se oprima una tecla
+void espera(){
+	getchar();
+	getchar();
+}
+void mostrar_usuario(char* user){
+	printf(">>>>%s\n",user);
+}
+/*----------------------------Menu del Jefe de Departamento-------------------------*/
+
+void menu_jd(char *user){
+	limpiar();
+	printf("************Jefe Departamento**************\n");
+	mostrar_usuario(user);	
+	printf("   1. Registrar usuario.\n");
+	printf("   2. Registrar anteproyecto.\n");
+	printf("   3. Asignar evaluadores.\n");
+	printf("   4. Buscar anteproyecto.\n");
+	printf("   5. Listar anteproyectos.\n");
+	printf("   6. Modificar concepto de anteproyecto.\n");
+	printf("   7.cerrar Sesion.\n");
+}
+void iniciar_menu_jd(char *user){
+	int opcion=0;	
+	do{
+		menu_jd(user);
+		opcion=ingresar_opcion();
+		switch(opcion){
+			case 1:
+				//registrar_usuario(user);
+				break;	
+			case 2:
+				//registrar_anteproyecto(user);
+				break;
+			case 3:
+				//asignar_evaluadores(user);
+				break;
+			case 4:
+				//buscar_anteproyecto_jd(user);
+				break;
+			case 5:
+				//listar_anteproyectos(user);
+				break;
+			case 6:
+				//modificar_concepto_jd(user);
+				break;
+			case 7:
+				//cambiar_contraseña(user);
+				break;
+
+			case 8:
+				printf("regresando....\n");
+				break;
+			default:
+				printf("Opcion no valida!, presione una tecla para continuar.");
+				espera();
+
+
+		}
+	}while(opcion!=8);
+
+}
+
+/*----------------------------Estudiante -Director-------------------------*/
+void menu_ed(char *user){
+	limpiar();
+	printf("************Estudiante-Director*************\n");
+	mostrar_usuario(user);	
+	printf("   1. Buscar anteproyecto.\n");
+	printf("   2. Listar anteproyectos.\n");
+	printf("   3.cerrar Sesion.\n");
 	
+}
+void iniciar_menu_ed(char *user){
+	int opcion=0;
+	do{
+		menu_ed(user);
+		opcion=ingresar_opcion();
+		switch(opcion){
+			case 1:
+				//buscar_anteproyecto(user);
+				break;
+			case 2:
+				//listar_anteproyectos(user);
+				break;
+			case 3:
+				printf("regresando....\n");
+				break;
+			case 6:
+				//modificar_concepto_e(user);
+				break;
+			default:
+				printf("Opcion no valida!, presione una tecla para continuar.");
+		}		espera();
+
+	}while(opcion!=3);
+}
+/*----------------------------Evaluadores-------------------------*/
+void menu_e(char *user){
+	limpiar();
+	printf("****************Evaluadores****************\n");
+	mostrar_usuario(user);	
+	printf("   1. Buscar anteproyecto.\n");
+	printf("   2. Listar anteproyectos.\n");
+	printf("   3. Modificar concepto de anteproyecto.\n");
+	printf("   4.cerrar Sesion.\n");
+}
+void iniciar_menu_e(char *user){
+	int opcion=0;
+	do{
+		menu_e(user);
+		opcion=ingresar_opcion();
+		switch(opcion){
+			case 1:
+				//buscar_anteproyecto(user);
+				break;
+			case 2:
+				//listar_anteproyectos(user);
+				break;
+			case 3:
+				printf("regresando....\n");
+				break;
+			default:
+				printf("Opcion no valida!, presione una tecla para continuar.");
+				espera();
+		}
+	}while(opcion!=4);
+}
+/*----------------------------Inicio de sesion-------------------------------------*/
+//Muestra el menu de sesion.
+void menu_sesion(){
+	limpiar();
+	printf("********************MENU********************\n");
+	printf("	1. Iniciar sesion.\n");
+	printf("	2. Salir.\n");
+}
+
+//Pide loos datos necesarios para iniciar session.
+void pedir_datos(datos_login_is  *datos_usuario){	
+	limpiar();
+	printf("************Inicio de sesion***********\n");
+	printf("Nombre de usuario:	");
+	scanf("%10s",datos_usuario->nom_user);
+	printf("Contrseña:	");
+	scanf("%10s",datos_usuario->contrasenia);
+}
+
+int iniciar_sesiones(int opcion, char* user){	
+	switch(opcion){
+		case 1:
+			iniciar_menu_jd(user);
+			break;
+		case 2:
+			iniciar_menu_ed(user);
+			break;
+		case 3:
+			iniciar_menu_e(user);
+			break;	
+		default: 
+			printf("Datos incorrectos..");
+			return -1;
+	}
+	return 0;
+}
+
+//Pide los datos al usuario e inicia sesion.
+void iniciar_sesion(){
+	
+	int opcion=0;
+	int bandera=0;
+	
+	do{
+		pedir_datos(&datos_usuario);
+
+		result1_is = iniciar_sesion_is_1(&datos_usuario, clnt_is);	
+		if (result1_is == (int *) NULL) {
+			clnt_perror (clnt_is, "call failed");
+		}else if (iniciar_sesiones(*result1_is,datos_usuario.nom_user)==-1){
+			printf("1-> volver a intentarlo, 2->regresar :");
+			scanf("%d",&bandera);
+		}
+		
+		strcpy(datos_usuario.nom_user,"");
+		strcpy(datos_usuario.contrasenia,"");
+	}while(bandera==1);
+}
+
+/*----------------------------Inicio-----------------------------------------------*/
+void prog_servicio()
+{
+	crear_clientes();
+	int opcion=0;
+	do{	
+		menu_sesion();
+		opcion=ingresar_opcion();
+		switch(opcion){
+			case 1:
+				iniciar_sesion();
+				break;
+			case 2:
+				printf("La aplicacion termino exitosamente.");
+				break;
+			default: 
+				printf("Opcion no valida!, presione una tecla para continuar.");
+				espera();
+	
+		}
+	}while(opcion!=2);
+	destruir_clientes();
 }
 
 
 int
 main (int argc, char *argv[])
 {
-	char *host;
-
 	if (argc < 2) {
 		printf ("usage: %s server_host\n", argv[0]);
 		exit (1);
 	}
 	host = argv[1];
-	prog_servicio(host);
+	prog_servicio();
 exit (0);
 }

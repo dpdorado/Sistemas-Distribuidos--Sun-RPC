@@ -6,6 +6,8 @@
 
 #include "servicio_inicio_sesion.h"
 #include "./librerias/std_is.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int *
 iniciar_sesion_is_1_svc(datos_login_is *argp, struct svc_req *rqstp)
@@ -13,12 +15,18 @@ iniciar_sesion_is_1_svc(datos_login_is *argp, struct svc_req *rqstp)
 	static int  result;	
 	retorno_is *ret;
 	
+	printf("user: %s\n",argp->nom_user);
+	printf("password:%s\n",argp->contrasenia);
 	ret=(retorno_is*)malloc(sizeof(retorno_is));
 
 	ret=logeo(argp, "./../informacion/usuarios.dat", "./../informacion/admin.dat");
-
+	
+	printf("mensaje: %s\n",ret->messaje);
+	printf("tipo usuario:%d\n",ret->tipo_user);
 	result=ret->tipo_user;
-
+	printf("Hola qui estoy...\n");
+		
+	free(ret);
 	return &result;
 }
 

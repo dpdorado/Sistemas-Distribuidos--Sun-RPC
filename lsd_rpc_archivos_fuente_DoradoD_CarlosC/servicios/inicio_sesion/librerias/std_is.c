@@ -11,28 +11,24 @@
 retorno_is* logeo(datos_login_is * datas, char* path_user, char *path_admin){
 
 	static retorno_is *ret; 			
-	usuario_is *user; 
-	FILE *file;
-	int var_con=-1;
+	int var_con=0;
 	
 	ret=(retorno_is*)malloc(sizeof(retorno_is));	
 	strcpy(ret->messaje,"No se pudo iniciar sesion.");
 	ret->tipo_user=-1;
 	
 	var_con=esta_en_users(datas,path_user);
-	if (var_con!=-1){
+	if (var_con==2 || var_con==3){
 		strcpy(ret->messaje,"Sesion iniciada.");
 		ret->tipo_user=var_con;
 		return ret;
 	}
-	
 	var_con=esta_en_admin(datas,path_admin);
-	if (var_con!=-1){
+	if (var_con==1){
 		strcpy(ret->messaje,"Sesion iniciada.");
 		ret->tipo_user=var_con;
 		return ret;
 	}
-	
 	return ret;
 }
 
@@ -40,7 +36,7 @@ retorno_is* logeo(datos_login_is * datas, char* path_user, char *path_admin){
 int esta_en_users(datos_login_is * datas, char* path_user){
 	usuario_is *user; 
 	FILE *file;
-	int result=-1;
+	static int result=-1;
 
 	file=fopen(path_user,"rb");
 	if (file==NULL){
@@ -48,8 +44,6 @@ int esta_en_users(datos_login_is * datas, char* path_user){
 	}
 	
 	user=(usuario_is*)malloc(sizeof(usuario_is));
-	strcpy(user->nom_user,"");
-	strcpy(user->contrasenia,"");	
 	
 	fread(user, sizeof(usuario_is), 1, file);
 
@@ -70,7 +64,7 @@ int esta_en_users(datos_login_is * datas, char* path_user){
 int esta_en_admin(datos_login_is * datas, char* path_admin){
 	admin_is *admin; 
 	FILE *file;
-	int result=-1;
+	static int result=-1;
 
 	file=fopen(path_admin,"rb");
 	if (file==NULL){
@@ -79,14 +73,12 @@ int esta_en_admin(datos_login_is * datas, char* path_admin){
 	
 	admin=(admin_is*)malloc(sizeof(admin_is));
 	
-	fread(admin, sizeof(usuario_is), 1, file);
+	fread(admin, sizeof(admin_is), 1, file);
 
 	if (strcmp(datas->nom_user,admin->user)==0  && strcmp(datas->contrasenia,admin->contrasenia)==0){
 		result=1;//1 es admin	
-		fclose(file);
-		return result;
 	}
-
+	free(admin);
 	fclose(file);
 	
 	return result;
