@@ -32,7 +32,7 @@ result_2 = cabiar_contrasenia_is_1(&datos_cambio_contrasenia_is, clnt);
 //----Jefe de Departamento
 CLIENT *clnt_jd;
 char **result1_jd;
-usuario_jd  registrar_usuario_jd_1_arg;
+usuario_jd  *datos_reg_user;
 char * *result2_jd;
 anteproyecto_jd  registrar_anteproyecto_jd_1_arg;
 char * *result3_jd;
@@ -125,6 +125,98 @@ void menu_jd(char *user){
 	printf("   6. Modificar concepto de anteproyecto.\n");
 	printf("   7.cerrar Sesion.\n");
 }
+//Permite ingresar los datos de un usuario al jefede departamento
+void pedir_datos_usuario(char* user){
+	//hacer validaciones al ingresar datos	
+	datos_reg_user=(usuario_jd *)malloc(sizeof(usuario_jd));
+	limpiar();
+	mostrar_usuario(user);
+	printf("Identificación: ");
+	scanf("%10s", datos_reg_user->identificacion);
+	printf("Nombre y apellido: ");
+	scanf("%30s", datos_reg_user->nombre_apellido);
+	printf("Nombre de usuario: ");
+	scanf("%10s", datos_reg_user->nom_user);
+	printf("Contraseña: ");
+	scanf("%10s", datos_reg_user->contrasenia);
+	printf("Jefe Deepartamento(1),Estudiante-Direcator(2), Evaluador(3): ");
+	scanf("%d", datos_reg_user->tipo_user);	
+
+}
+
+//Logica para registrarun usuario 
+void registrar_usuario(char *user){
+	pedir_datos_usuario(user);
+	result1_jd = registrar_usuario_jd_1(datos_reg_user, clnt_jd);
+	if (result1_jd == (char **) NULL) {
+		clnt_perror (clnt_jd, "call failed");
+	}else{
+		printf("%s\n",*result1_jd);
+		espera();
+	}
+	free(datos_reg_user);
+}
+
+//Permite ingresar los datos de un usuario al jefede departamento
+void pedir_datos_anteproyecto(char* user){
+	//hacer validaciones al ingresar datos	
+	/*datos_reg_user=(usuario_jd *)malloc(sizeof(usuario_jd));
+	limpiar();
+	mostrar_usuario(user);
+	printf("Modalidad: ");
+	scanf("%12s", datos_reg_user->modalidad);
+	printf("Título: ");
+	scanf("%40s", datos_reg_user->titulo);
+	printf("Codigo: ");
+	scanf("%3s", datos_reg_user->codigo);
+	printf("Estudiante 1: ");
+	scanf("%30s", datos_reg_user->nombre_estud1);
+	printf("Estudiante 2: ");
+	scanf("%30s", datos_reg_user->nombre_estud2);	
+	printf("Director: ");
+	scanf("%30s", datos_reg_user->director);
+	printf("Director: ");
+	scanf("%30s", datos_reg_user->co_director);
+	printf("Fecha de registro: ");
+	scanf("%10s", datos_reg_user->fecha_registro);
+	printf("Fecha de aprobacion: ");
+	scanf("%12s", datos_reg_user->fecha_aprobacion);
+	printf("Concepto: ");
+	scanf("%d", datos_reg_user->concepto);
+	printf("Estado: ");
+	scanf("%d", datos_reg_user->estado);
+	printf("Núemro de revisión: ");
+	scanf("%d", datos_reg_user->numero_revision);*/
+
+}
+//Pide al jp los datos del anteproyectos
+void registrar_anteproyecto(char* user){
+/*result_2 = registrar_anteproyecto_jd_1(&registrar_anteproyecto_jd_1_arg, clnt);
+	if (result_2 == (char **) NULL) {
+		clnt_perror (clnt, "call failed");
+	}*/
+}
+void asignar_evaluadores(char* user){
+/*result_3 = asignar_evaluadores_jd_1(&asignar_evaluadores_jd_1_arg, clnt);
+	if (result_3 == (char **) NULL) {
+		clnt_perror (clnt, "call failed");
+	}*/
+}
+void buscar_anteproyectos_jd(char *user){
+/*result_4 = buscar_anteproyecto_jd_1(&buscar_anteproyecto_jd_1_arg, clnt);
+	if (result_4 == (anteproyecto_completo_jd *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}*/
+}
+void listar_anteproyectos(char *user){
+	//estudiante direactor
+}
+void modificar_concepto_jd(char *user){
+
+}
+void cambiar_contrasenia(char* user){
+	//inicio de sesion
+}
 void iniciar_menu_jd(char *user){
 	int opcion=0;	
 	do{
@@ -150,7 +242,7 @@ void iniciar_menu_jd(char *user){
 				//modificar_concepto_jd(user);
 				break;
 			case 7:
-				//cambiar_contraseña(user);
+				//cambiar_contrasenia(user);
 				break;
 
 			case 8:
@@ -191,9 +283,6 @@ void iniciar_menu_ed(char *user){
 			case 3:
 				printf("regresando....\n");
 				break;
-			case 6:
-				//modificar_concepto_e(user);
-				break;
 			default:
 				printf("Opcion no valida!, presione una tecla para continuar.");
 		}		espera();
@@ -210,6 +299,7 @@ void menu_e(char *user){
 	printf("   3. Modificar concepto de anteproyecto.\n");
 	printf("   4.cerrar Sesion.\n");
 }
+void modificar_concepto_e(char* user){}
 void iniciar_menu_e(char *user){
 	int opcion=0;
 	do{
@@ -223,6 +313,9 @@ void iniciar_menu_e(char *user){
 				//listar_anteproyectos(user);
 				break;
 			case 3:
+				//modificar_concepto_e(user);
+				break;
+			case 4:
 				printf("regresando....\n");
 				break;
 			default:
@@ -270,8 +363,6 @@ int iniciar_sesiones(int opcion, char* user){
 
 //Pide los datos al usuario e inicia sesion.
 void iniciar_sesion(){
-	
-	int opcion=0;
 	int bandera=0;
 	
 	do{
