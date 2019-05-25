@@ -393,6 +393,7 @@ void prog_servicio()
 	do{	
 		menu_sesion();
 		opcion=ingresar_opcion();
+		printf("\n");
 		switch(opcion){
 			case 1:
 				iniciar_sesion();
