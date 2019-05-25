@@ -13,8 +13,6 @@ int main(int argc, char *argv[]){
 
 	strcpy(datos.user,"dpdaniel");//nombre de usuario por defecto
 	strcpy(datos.password,"123456");//contraseña por defecto
-	
-
 
 	file=fopen("./../admin.dat","ab");
 	if (file==NULL){
