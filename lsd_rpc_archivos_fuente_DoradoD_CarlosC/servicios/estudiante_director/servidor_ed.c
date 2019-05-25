@@ -14,7 +14,7 @@ buscar_anteproyecto_ed_1_svc(char **argp, struct svc_req *rqstp)
 
 	result=(anteproyecto_ed*)malloc(sizeof(anteproyecto_ed));
 	
-	result = search_graft(*argp, "./../informacion/anteproyectos.dat");
+	result = search_draft(*argp, "./../informacion/anteproyectos.dat");
 
 	return result;
 }

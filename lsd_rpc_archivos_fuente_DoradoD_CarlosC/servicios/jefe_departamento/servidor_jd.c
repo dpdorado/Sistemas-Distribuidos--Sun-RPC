@@ -26,7 +26,7 @@ registrar_anteproyecto_jd_1_svc(anteproyecto_jd *argp, struct svc_req *rqstp)
 
 	result=(char*)malloc(sizeof(char)*50);
 	
-	strcpy(result,register_user(argp, "./../informacion/anteproyectos.dat"));
+	strcpy(result,register_draft(argp, "./../informacion/anteproyectos.dat"));
 
 	return &result;
 }
@@ -38,7 +38,7 @@ asignar_evaluadores_jd_1_svc(evaluadores_jd *argp, struct svc_req *rqstp)
 
 	result=(char*)malloc(sizeof(char)*50);
 	
-	strcpy(result,register_user(argp, "./../informacion/evaluadores.dat"));
+	strcpy(result,register_evaluators(argp, "./../informacion/anteproyectos.dat", "./../informacion/evaluadores.dat"));
 
 	return &result;
 }
@@ -50,7 +50,7 @@ buscar_anteproyecto_jd_1_svc(char **argp, struct svc_req *rqstp)
 
 	result=(anteproyecto_completo_jd*)malloc(sizeof(anteproyecto_completo_jd));
 	
-	result = search_graft(*argp, "./../informacion/anteproyectos.dat","./../informacion/evaluadores.dat");
+	result = search_draft(*argp, "./../informacion/anteproyectos.dat","./../informacion/evaluadores.dat");
 
 	return result;
 }

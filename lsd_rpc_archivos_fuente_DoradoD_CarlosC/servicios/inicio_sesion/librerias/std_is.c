@@ -67,7 +67,7 @@ int esta_en_users(datos_login_is * datas, char* path_user){
 
 
 //Verifica si el usuario esta en usuarios tipo de usuario,-1=datos incorrectos
-int esta_en_users(datos_login_is * datas, char* path_admin){
+int esta_en_admin(datos_login_is * datas, char* path_admin){
 	admin_is *admin; 
 	FILE *file;
 	int result=-1;
@@ -81,7 +81,7 @@ int esta_en_users(datos_login_is * datas, char* path_admin){
 	
 	fread(admin, sizeof(usuario_is), 1, file);
 
-	if (strcmp(datas->nom_user,user->nom_user)==0  && strcmp(datas->contrasenia,user->contrasenia)==0){
+	if (strcmp(datas->nom_user,admin->user)==0  && strcmp(datas->contrasenia,admin->contrasenia)==0){
 		result=1;//1 es admin	
 		fclose(file);
 		return result;
@@ -98,7 +98,7 @@ char* modify_password_admin(datos_cambio_contrsenia_is *datas, char* path_admin)
 	admin_is *admin; 
 	FILE *file;
 
-	massaje = (char*)malloc(sizeof(char)*50);
+	messaje = (char*)malloc(sizeof(char)*50);
 	strcpy(messaje,"No se cambio la contrasenia.");
 	
 	file=fopen(path_admin,"r+b");

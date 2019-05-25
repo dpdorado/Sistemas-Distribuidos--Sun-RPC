@@ -20,7 +20,7 @@ char* register_draft(anteproyecto_jd *draft, char* path);
 int registered_draft(char* code,char *path);
 
 //Registra los evaluadores de un anteproyectos
-char* register_evaluators(evaluadores_jd *eval, char* path);
+char* register_evaluators(evaluadores_jd *eval, char* path_draft,char* path_eval);
 
 //Verifica si existe un anteproyecto
 int registered_draft_eval(char* code,char *path);

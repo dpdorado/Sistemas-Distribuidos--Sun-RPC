@@ -9,12 +9,12 @@ SERVER = servidor_is
 SOURCES_CLNT.c = 
 SOURCES_CLNT.h = 
 SOURCES_SVC.c = servidor_is.c
-SOURCES_SVC.h = servicio_inicio_sesion.h
+SOURCES_SVC.h = servicio_inicio_sesion.h ./librerias/std_is.h
 SOURCES.x = servicio_inicio_sesion.x
 
-TARGETS_SVC.c = servicio_inicio_sesion_svc.c   servicio_inicio_sesion_xdr.c 
+TARGETS_SVC.c = servicio_inicio_sesion_svc.c   servicio_inicio_sesion_xdr.c	./librerias/std_is.c
 TARGETS_CLNT.c =     servicio_inicio_sesion_xdr.c 
-TARGETS = servicio_inicio_sesion.h servicio_inicio_sesion_xdr.c   servicio_inicio_sesion_svc.c    
+TARGETS = servicio_inicio_sesion.h servicio_inicio_sesion_xdr.c   servicio_inicio_sesion_svc.c	./librerias/std_is.h ./librerias/std_is.c
 
 OBJECTS_CLNT = $(SOURCES_CLNT.c:%.c=%.o) $(TARGETS_CLNT.c:%.c=%.o)
 OBJECTS_SVC = $(SOURCES_SVC.c:%.c=%.o) $(TARGETS_SVC.c:%.c=%.o)

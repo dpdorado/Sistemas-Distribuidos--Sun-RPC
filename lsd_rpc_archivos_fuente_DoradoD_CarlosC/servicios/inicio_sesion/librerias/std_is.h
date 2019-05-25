@@ -38,7 +38,7 @@ retorno_is* logeo(datos_login_is * datas, char* path_user, char *path_admin);
 int esta_en_users(datos_login_is * datas, char* path_user);
 
 //Verifica si el usuario esta en usuarios tipo de usuario,-1=datos incorrectos
-int esta_en_users(datos_login_is * datas, char* path_admin);
+int esta_en_admin(datos_login_is * datas, char* path_admin);
 
 //Modifica la contraseña de el administrador
 char* modify_password_admin(datos_cambio_contrsenia_is *datas, char* path_admin);

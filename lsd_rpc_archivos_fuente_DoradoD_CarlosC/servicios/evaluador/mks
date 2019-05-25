@@ -13,9 +13,8 @@ SOURCES_SVC.h = servicios_e.h ./librerias/std_e.h
 SOURCES.x = servicios_e.x
 
 TARGETS_SVC.c = servicios_e_svc.c   servicios_e_xdr.c ./librerias/std_e.c
-TARGETS_CLNT.c =     servicios_e_xdr.c 
+TARGETS_CLNT.c =   servicios_e_xdr.c 
 TARGETS = servicios_e.h servicios_e_xdr.c   servicios_e_svc.c	./librerias/std_e.h ./librerias/std_e.c
-
 
 OBJECTS_CLNT = $(SOURCES_CLNT.c:%.c=%.o) $(TARGETS_CLNT.c:%.c=%.o)
 OBJECTS_SVC = $(SOURCES_SVC.c:%.c=%.o) $(TARGETS_SVC.c:%.c=%.o)

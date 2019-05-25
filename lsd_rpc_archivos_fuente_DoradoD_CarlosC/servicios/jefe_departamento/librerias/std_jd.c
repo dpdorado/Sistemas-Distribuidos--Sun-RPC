@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "std_jp.h"
+#include "std_jd.h"
 #include "./../servicios_jd.h"
 
 //Registra un usuario.
@@ -11,7 +11,7 @@ char* register_user(usuario_jd *user, char* path){
 	FILE *file;
 	int aux=0;
 
-	massaje = (char*)malloc(sizeof(char)*50);
+	messaje = (char*)malloc(sizeof(char)*50);
 	strcpy(messaje,"No se pudo registrar al usuario.");
 
 	aux=registered_user(user->identificacion, user->nom_user,path);	
@@ -20,7 +20,7 @@ char* register_user(usuario_jd *user, char* path){
 		if (file==NULL){
 			return messaje;
 		}
-		fwrite(user, sizeof(usuario_jp), 1, file);
+		fwrite(user, sizeof(usuario_jd), 1, file);
 		strcpy(messaje,"Usuario registrado.");
 		fclose(file);
 	}else if(aux==1){
@@ -28,23 +28,23 @@ char* register_user(usuario_jd *user, char* path){
 	}else if(aux==2){
 		strcpy(messaje,"El nombre de usuario ya esxiste.");
 	}
-	return menssaje;
+	return messaje;
 }
 
 //Verifica si existe un usuario
 int registered_user(char* id,char* n_user,char *path){
 	FILE *file;
-	usuario_jp *user;
+	usuario_jd *user;
 	int result=3;
 
 	file=fopen(path,"rb");
-	if (arch==NULL){
+	if (file==NULL){
 		return result;
 	}
 	
-	user=(usuario_jp*)malloc(sizeof(usuario_jp));
+	user=(usuario_jd*)malloc(sizeof(usuario_jd));
 
-	fread(user, sizeof(usuario_jp), 1, file);
+	fread(user, sizeof(usuario_jd), 1, file);
 
 	while(!feof(file)){
 		if (strcmp(id,user->identificacion)==0){
@@ -54,7 +54,7 @@ int registered_user(char* id,char* n_user,char *path){
 			result=2;	   
 			break;
 		}
-		fread(user, sizeof(usuario_jp), 1, file);
+		fread(user, sizeof(usuario_jd), 1, file);
 	}
 
 	if (result != 1 && result!=2){
@@ -71,7 +71,7 @@ char* register_draft(anteproyecto_jd *draft, char* path){
 	FILE *file;
 	int aux=0;
 
-	massaje = (char*)malloc(sizeof(char)*50);
+	messaje = (char*)malloc(sizeof(char)*50);
 	strcpy(messaje,"No se pudo registrar el anteproyecto.");
 
 	aux=registered_draft(draft->codigo,path);	
@@ -80,36 +80,36 @@ char* register_draft(anteproyecto_jd *draft, char* path){
 		if (file==NULL){
 			return messaje;
 		}
-		fwrite(draft, sizeof(anteproyecto_jp), 1, file);
+		fwrite(draft, sizeof(anteproyecto_jd), 1, file);
 		strcpy(messaje,"Anteproyecto registrado.");
 		fclose(file);
 	}else if(aux==1){
 		strcpy(messaje,"El codigo del anteproyecto ya esta registrado.");
 	}
-	return menssaje;
+	return messaje;
 }
 
 //Verifica si existe un anteproyecto
 int registered_draft(char* code,char *path){
 	FILE *file;
-	anteproyecto_jp *draft;
+	anteproyecto_jd *draft;
 	int result=2;
 
-	file=fopen(file,"rb");
+	file=fopen(path,"rb");
 	if (file==NULL){
 		return result;
 	}
 
-	draft=(anteproyecto_jp*)malloc(sizeof(anteproyecto_jp));
+	draft=(anteproyecto_jd*)malloc(sizeof(anteproyecto_jd));
 
-	fread(draft, sizeof(anteproyecto_jp), 1, file);
+	fread(draft, sizeof(anteproyecto_jd), 1, file);
 
 	while(!feof(file)){
 		if (strcmp(code,draft->codigo)==0){
 			result=1;	   
 			break;
 		}
-		fread(draft, sizeof(usuario_jp), 1, file);
+		fread(draft, sizeof(usuario_jd), 1, file);
 	}
 
 	if (result != 1){
@@ -126,10 +126,10 @@ char* register_evaluators(evaluadores_jd *eval, char* path_draft,char* path_eval
 	FILE *file;
 	int aux=0;
 
-	massaje = (char*)malloc(sizeof(char)*50);
+	messaje = (char*)malloc(sizeof(char)*50);
 	strcpy(messaje,"No se registraron los evaluadores.");
 	
-	if(registered_draft(evaluadores_jd->codigo_anteproyecto,path_draft)==0){
+	if(registered_draft(eval->codigo_anteproyecto,path_draft)==0){
 		strcpy(messaje,"No existe el anteproyecto.");
 		return messaje;
 	} 
@@ -146,7 +146,7 @@ char* register_evaluators(evaluadores_jd *eval, char* path_draft,char* path_eval
 	}else if(aux==1){
 		strcpy(messaje,"El anteproyecto ya tiene evaluadores.");
 	}
-	return menssaje;
+	return messaje;
 }
 
 //Verifica si existe un anteproyecto
@@ -155,7 +155,7 @@ int registered_draft_eval(char* code,char *path){
 	evaluadores_jd *eval;
 	int result=2;
 
-	file=fopen(file,"rb");
+	file=fopen(path,"rb");
 	if (file==NULL){
 		return result;
 	}
@@ -181,12 +181,12 @@ int registered_draft_eval(char* code,char *path){
 }
 
 //Buscar un anteproyecto
-anteproyecto_completo_jd * search_graft(char* code, char* path_draft,char* path_eval){
+anteproyecto_completo_jd * search_draft(char* code, char* path_draft,char* path_eval){
 	static anteproyecto_completo_jd * draft_complete;
 	static anteproyecto_jd * draft; 
 	static evaluadores_jd * eval;	
 	
-	draft_complete=((anteproyecto_completo_jd*)malloc(sizeof(anteproyecto_completo_jd));
+	draft_complete=(anteproyecto_completo_jd*)malloc(sizeof(anteproyecto_completo_jd));
 	
 	draft=(anteproyecto_jd*)malloc(sizeof(anteproyecto_jd));
 	draft=search_draft_dr(code,path_draft);
@@ -194,7 +194,7 @@ anteproyecto_completo_jd * search_graft(char* code, char* path_draft,char* path_
 	eval=(evaluadores_jd*)malloc(sizeof(evaluadores_jd));
 	eval=search_draft_ev(code,path_eval);
 	
-	strcpy(draft_complete,draft->modalidad);
+	strcpy(draft_complete->modalidad,draft->modalidad);
 	strcpy(draft_complete->titulo,draft->titulo);
 	strcpy(draft_complete->codigo,draft->codigo);
 	strcpy(draft_complete->nombre_estud1,draft->nombre_estud1);
@@ -296,7 +296,7 @@ evaluadores_jd * eval_null(){
 	
 	eval=(evaluadores_jd*)malloc(sizeof(evaluadores_jd));
 
-	strcpy(eval->codigo_proyecto,"");
+	strcpy(eval->codigo_anteproyecto,"");
 	strcpy(eval->nombre_evaluador1,"");
 	strcpy(eval->concepto_evaluador1,"");
 	strcpy(eval->fecha_revision1,"");
@@ -311,10 +311,10 @@ evaluadores_jd * eval_null(){
 //Modifica el concepto de un anteproyecto
 char * modify_concept_draft(char* code, int concept, char* path_draft){
 	static char* messaje;
-	anteproyecto_jp *draft;
+	anteproyecto_jd *draft;
 	FILE *file;
 
-	massaje = (char*)malloc(sizeof(char)*50);
+	messaje = (char*)malloc(sizeof(char)*50);
 	strcpy(messaje,"Concepto no modificado.");
 	
 	file=fopen(path_draft,"r+b");
@@ -322,21 +322,21 @@ char * modify_concept_draft(char* code, int concept, char* path_draft){
 		return messaje;
 	}
 
-	draft=(anteproyecto_jp*)malloc(sizeof(anteproyecto_jp));
+	draft=(anteproyecto_jd*)malloc(sizeof(anteproyecto_jd));
 
-	fread(draft, sizeof(anteproyecto_jp), 1, file);
+	fread(draft, sizeof(anteproyecto_jd), 1, file);
 
 	while(!feof(file)){
 		if (strcmp(code,draft->codigo)==0){
-			int pos = ftell(file)-sizeof(anteproyecto_jp);
+			int pos = ftell(file)-sizeof(anteproyecto_jd);
 			fseek(file,pos,SEEK_SET);
 			draft->concepto=concept;
-			fwrite(draft, sizeof(anteproyecto_jp), 1, file);
+			fwrite(draft, sizeof(anteproyecto_jd), 1, file);
 			strcpy(messaje,"Se modifico elconcepto.");
 			fclose(file);
 			return messaje;
 		}
-		fread(draft, sizeof(anteproyecto_jp), 1, file);
+		fread(draft, sizeof(anteproyecto_jd), 1, file);
 	}
 	fclose(file);
 	return messaje;

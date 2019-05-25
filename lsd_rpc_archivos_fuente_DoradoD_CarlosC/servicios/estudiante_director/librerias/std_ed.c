@@ -68,7 +68,7 @@ nodo_anteproyecto_ed * list_draft(char* path_draft){
 	}
 	
 	draft=(anteproyecto_ed*)malloc(sizeof(anteproyecto_ed));
-	nuevo_anteproyecto=(porx_nodo_anteproyecto_ed)malloc(sizeof(nodo_anteproyecto_ed));
+	nuevo_anteproyecto=(prox_nodo_anteproyecto_ed)malloc(sizeof(nodo_anteproyecto_ed));
 	
 	fread(draft, sizeof(anteproyecto_ed), 1, file);
 
@@ -96,7 +96,7 @@ nodo_anteproyecto_ed * list_draft(char* path_draft){
 nodo_anteproyecto_ed * node_draft_null(){
 	static nodo_anteproyecto_ed * draft;
 	
-	draft=(nodo_anteproyecto_ed*)malloc(sizeof(nodo_anteproyecto_ed));
+	draft=(prox_nodo_anteproyecto_ed)malloc(sizeof(nodo_anteproyecto_ed));
 
 	strcpy(draft->titulo,"");
 	strcpy(draft->codigo,"");
