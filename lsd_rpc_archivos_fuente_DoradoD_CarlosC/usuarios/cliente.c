@@ -123,7 +123,7 @@ void menu_jd(char *user){
 	printf("   4. Buscar anteproyecto.\n");
 	printf("   5. Listar anteproyectos.\n");
 	printf("   6. Modificar concepto de anteproyecto.\n");
-	printf("   7.cerrar Sesion.\n");
+	printf("   7. Cerrar Sesion.\n");
 }
 //Permite ingresar los datos de un usuario al jefede departamento
 void pedir_datos_usuario(char* user){
@@ -355,7 +355,7 @@ int iniciar_sesiones(int opcion, char* user){
 			iniciar_menu_e(user);
 			break;	
 		default: 
-			printf("Datos incorrectos..");
+			printf("Datos incorrectos..\n");
 			return -1;
 	}
 	return 0;
@@ -372,8 +372,12 @@ void iniciar_sesion(){
 		if (result1_is == (int *) NULL) {
 			clnt_perror (clnt_is, "call failed");
 		}else if (iniciar_sesiones(*result1_is,datos_usuario.nom_user)==-1){
-			printf("1-> volver a intentarlo, 2->regresar :");
-			scanf("%d",&bandera);
+			printf("1-> volver a intentarlo\n");
+			printf("2-> regresar\n");
+			bandera = ingresar_opcion();
+			//scanf("%d",&bandera);
+		}else{
+			printf("Inicio correcto\n");
 		}
 		
 		strcpy(datos_usuario.nom_user,"");
