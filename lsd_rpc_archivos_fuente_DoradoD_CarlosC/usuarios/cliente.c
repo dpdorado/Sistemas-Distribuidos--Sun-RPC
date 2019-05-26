@@ -124,7 +124,7 @@ void limpiar()
  */
 void espera()
 {
-	printf("\nPresione enter para continua...");
+	printf("\nPresione enter para continua...\n");
 	getchar();
 	getchar();
 }
@@ -345,11 +345,76 @@ void asignar_evaluadores(char *user)
 	}
 	else
 	{
-		printf("Se han asignado los evaluadores!");
+		printf("Se han asignado los evaluadores!\n");
 		espera();
 	}
 }
 
+void imprimir_estado(int estado)
+{
+	switch (estado)
+	{
+	case 1:
+		printf("Estado: Sin asignación\n");
+		/* code */
+		break;
+	case 2:
+		printf("Estado: Evaluadores asignados\n");
+		/* code */
+		break;
+	case 3:
+		printf("Estado: En revisión\n");
+		/* code */
+		break;
+	case 4:
+		printf("Estado: Evaluado\n");
+		/* code */
+		break;
+
+	default:
+		break;
+	}
+}
+
+void imprimir_concepto(int concepto){
+	switch (concepto)
+	{
+	case 1:
+		printf("Concepto: Aprobado.\n");
+		break;
+	case 2:
+		printf("Concepto: No aprobado.\n");
+		break;
+	
+	default:
+		break;
+	}
+}
+/**
+ * @brief Probar peticion
+ * 
+ */
+void porbar_antcom(){
+	strcpy(result4_jd->codigo, "001");
+	strcpy(result4_jd->modalidad, "Aprobado");
+	strcpy(result4_jd->titulo, "titulo");
+	strcpy(result4_jd->nombre_estud1, "e1");
+	strcpy(result4_jd->nombre_estud2, "e2");
+	strcpy(result4_jd->director, "dir");
+	strcpy(result4_jd->co_director, "codir");
+	strcpy(result4_jd->fecha_registro, "fr");
+	strcpy(result4_jd->fecha_aprobacion, "fApro");
+	result4_jd->concepto= 1;
+	result4_jd->estado=1;
+	result4_jd->numero_revision= 1;
+	strcpy(result4_jd->codigo_anteproyecto, "001");
+	strcpy(result4_jd->nombre_evaluador1, "ev1");
+	strcpy(result4_jd->concepto_evaluador1, "conev1");
+	strcpy(result4_jd->fecha_revision1, "fechaR1");
+	strcpy(result4_jd->nombre_evaluador2, "ev2");
+	strcpy(result4_jd->concepto_evaluador2, "conev2");
+	strcpy(result4_jd->fecha_revision2, "fechaR2");
+}
 void buscar_anteproyectos_jd(char *user)
 {
 	pedir_codigo();
@@ -357,19 +422,48 @@ void buscar_anteproyectos_jd(char *user)
 	scanf("%s", buscar_anteproyecto_jd_1_arg);
 
 	result4_jd = buscar_anteproyecto_jd_1(&buscar_anteproyecto_jd_1_arg, clnt_jd);
+	
+	// porbar_antcom(); //TODO Eliminar antes de entrea 
+
 	if (result4_jd == (anteproyecto_completo_jd *)NULL)
 	{
 		clnt_perror(clnt_jd, "call failed");
-		printf("Error");
+		// printf("Error\n");
 	}
-	else if(*(result4_jd)->codigo == -1)
+	else if (*(result4_jd)->codigo == -1)
 	{
-		printf("No se encontro ningun anteproyecto con ese codigo!");
-	}else{
-		printf("Hay datos");
-
-		printf("%s", result4_jd->codigo);
+		printf("No se encontro ningun anteproyecto con ese codigo!\n");
 	}
+	else
+	{
+		printf("\tDATOS DE ANTEPROYECTO\n\n");
+		// Datos del anteproyecto
+		printf("Codigo: %s\n", result4_jd->codigo);
+		printf("Codigo Anteproyecto: %s\n", result4_jd->codigo_anteproyecto);
+		printf("Titulo: %s\n", result4_jd->titulo);
+		printf("Director: %s\n", result4_jd->director);
+		printf("Co-Director: %s\n", result4_jd->co_director);
+
+		// Mostrar Estado
+		imprimir_estado(result4_jd->estado);
+		printf("Fecha registro: %s\n", result4_jd->fecha_registro);
+		printf("Estudiante 1: %s\n", result4_jd->nombre_estud1);
+		printf("Estudiante 2: %s\n", result4_jd->nombre_estud2);
+		imprimir_concepto(result4_jd->concepto);
+		printf("Fecha Aprovacion: %s\n", result4_jd->fecha_aprobacion);
+		printf("Modalidad: %s\n", result4_jd->modalidad);
+		printf("Revision # %d\n", result4_jd->numero_revision);
+
+		printf("Nom. Evaluador 1: %s\n", result4_jd->nombre_evaluador1);
+		printf("Concepto Eval. 1: %s\n", result4_jd->concepto_evaluador1);
+		printf("Nom. Evaluador 2: %s\n", result4_jd->nombre_evaluador2);
+		printf("Concepto Eval. 2: %s\n", result4_jd->concepto_evaluador2);
+
+		printf("Fecha Revision 1: %s\n", result4_jd->fecha_revision1);
+		printf("Fecha Revision 2: %s\n", result4_jd->fecha_revision2);
+
+	}
+	free(result4_jd);
 	espera();
 }
 void listar_anteproyectos(char *user)
@@ -387,9 +481,9 @@ void listar_anteproyectos(char *user)
 		printf("\n Listado de Anteproyectos \n");
 		while ((result2_ed) != NULL)
 		{
-			printf("\n\t\tAnteproyectos %i: ", i + 1);
-			printf("\nCódigo: %3s ", result2_ed->codigo);
-			printf("\nTitulo: %40s ", result2_ed->titulo);
+			printf("\n\t\tAnteproyectos %i\n ", i + 1);
+			printf("Código: %3s \n", result2_ed->codigo);
+			printf("Titulo: %40s \n", result2_ed->titulo);
 
 			result2_ed = result2_ed->nodo_siguiente;
 			i++;
@@ -461,6 +555,9 @@ void menu_ed(char *user)
 
 void buscar_anteproyecto(char *user)
 {
+
+	pedir_codigo();
+
 	result1_ed = buscar_anteproyecto_ed_1(&buscar_anteproyecto_ed_1_arg, clnt_ed);
 	if (result1_ed == (anteproyecto_ed *)NULL)
 	{
@@ -486,7 +583,7 @@ void iniciar_menu_ed(char *user)
 			printf("regresando....\n");
 			break;
 		default:
-			printf("Opcion no valida!, presione una tecla para continuar.");
+			printf("Opcion no valida!\n");
 		}
 		espera();
 
@@ -528,7 +625,7 @@ void iniciar_menu_e(char *user)
 			printf("regresando....\n");
 			break;
 		default:
-			printf("Opcion no valida!, presione una tecla para continuar.");
+			printf("Opcion no valida!\n");
 			espera();
 		}
 	} while (opcion != 4);
@@ -629,7 +726,7 @@ void prog_servicio()
 			printf("La aplicacion termino exitosamente.");
 			break;
 		default:
-			printf("Opcion no valida!, presione una tecla para continuar.");
+			printf("Opcion no valida!");
 			espera();
 		}
 	} while (opcion != 2);
