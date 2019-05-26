@@ -29,6 +29,7 @@ anteproyecto_ed * search_draft(char* code, char* path_draft){
 	}
 	
 	fclose(file);
+	free(draft);
 	return draft_null();
 }
 //Declara un anteproyectos sin información
@@ -90,6 +91,7 @@ nodo_anteproyecto_ed * list_draft(char* path_draft){
 	}
 	
 	fclose(file);
+	free(draft);
 	return cabeza;
 }
 //Cabeza de la lista sin infoemación

@@ -51,11 +51,13 @@ int esta_en_users(datos_login_is * datas, char* path_user){
 		if (strcmp(datas->nom_user,user->nom_user)==0  && strcmp(datas->contrasenia,user->contrasenia)==0){
 			result=user->tipo_user;		
 			fclose(file);
+			free(user);
 			return result;
 		}
 		fread(user, sizeof(usuario_is), 1, file);
 	}
 	fclose(file);
+	free(user);
 	return result;
 }
 
@@ -113,6 +115,7 @@ char* modify_password_admin(datos_cambio_contrsenia_is *datas, char* path_admin)
 	}
 	
 	fclose(file);
+	free(admin);
 	return messaje;
 }
 
