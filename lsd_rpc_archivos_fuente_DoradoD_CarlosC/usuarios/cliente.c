@@ -36,7 +36,7 @@ usuario_jd *datos_reg_user;
 char **result2_jd;
 anteproyecto_jd *registrar_anteproyecto_jd_1_arg;
 char **result3_jd;
-evaluadores_jd asignar_evaluadores_jd_1_arg;
+evaluadores_jd *asignar_evaluadores_jd_1_arg;
 anteproyecto_completo_jd *result4_jd;
 char *buscar_anteproyecto_jd_1_arg;
 char **result5_jd;
@@ -155,8 +155,7 @@ void menu_jd(char *user)
 	printf("   4. Buscar anteproyecto.\n");
 	printf("   5. Listar anteproyectos.\n");
 	printf("   6. Modificar concepto de anteproyecto.\n");
-	printf("   7. Modificar concepto de anteproyecto.\n");
-	printf("   8. Cerrar Sesion.\n");
+	printf("   7. Cerrar Sesion.\n");
 }
 /**
  * @brief Permite ingresar los datos de un usuario al jefede departamento
@@ -305,13 +304,40 @@ void registrar_anteproyecto(char *user)
 	}
 }
 
+void pedir_datos_evaluadores()
+{
+	limpiar();
+	asignar_evaluadores_jd_1_arg = (evaluadores_jd *)malloc(sizeof(evaluadores_jd));
+	printf("\t\tAsignacion de evaluadores\n\n");
+	printf("Código del anteproyecto: ");
+	scanf("%12s", asignar_evaluadores_jd_1_arg->codigo_anteproyecto);
+	printf("Nombre del evaluador 1: ");
+	scanf("%30s", asignar_evaluadores_jd_1_arg->nombre_evaluador1);
+	printf("Concepto del evaluador 1: ");
+	scanf("%20s", asignar_evaluadores_jd_1_arg->concepto_evaluador1);
+	printf("Fecha de revision 1: ");
+	scanf("%10s", asignar_evaluadores_jd_1_arg->fecha_revision1);
+
+	printf("Nombre del evaluador 2: ");
+	scanf("%30s", asignar_evaluadores_jd_1_arg->nombre_evaluador2);
+	printf("Concepto del evaluador 2: ");
+	scanf("%20s", asignar_evaluadores_jd_1_arg->concepto_evaluador2);
+	printf("Fecha de revision 2: ");
+	scanf("%10s", asignar_evaluadores_jd_1_arg->fecha_revision2);
+}
 void asignar_evaluadores(char *user)
 {
-	result3_jd = asignar_evaluadores_jd_1(&asignar_evaluadores_jd_1_arg, clnt_jd);
+	pedir_datos_evaluadores();
+	result3_jd = asignar_evaluadores_jd_1(asignar_evaluadores_jd_1_arg, clnt_jd);
 	if (result3_jd == (char **)NULL)
 	{
 		clnt_perror(clnt_jd, "call failed");
+	}else
+	{
+		printf("Se han asignado los evaluadores!");
+		espera();
 	}
+	
 }
 
 void buscar_anteproyectos_jd(char *user)
@@ -342,7 +368,7 @@ void listar_anteproyectos(char *user)
 	else
 	{
 		int i = 0;
-		
+
 		printf("\n Listado de Anteproyectos \n");
 		while ((result2_ed) != NULL)
 		{
@@ -382,10 +408,10 @@ void iniciar_menu_jd(char *user)
 			registrar_anteproyecto(user);
 			break;
 		case 3:
-			//asignar_evaluadores(user);
+			asignar_evaluadores(user);
 			break;
 		case 4:
-			// buscar_anteproyectos_jd(user);
+			buscar_anteproyectos_jd(user);
 			break;
 		case 5:
 			listar_anteproyectos(user);
@@ -453,7 +479,9 @@ void menu_e(char *user)
 	printf("   3. Modificar concepto de anteproyecto.\n");
 	printf("   4.cerrar Sesion.\n");
 }
-void modificar_concepto_e(char *user) {}
+void modificar_concepto_e(char *user)
+{
+}
 void iniciar_menu_e(char *user)
 {
 	int opcion = 0;
