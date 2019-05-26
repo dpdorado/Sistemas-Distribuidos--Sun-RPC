@@ -226,7 +226,7 @@ void registrar_usuario(char *user)
 void pedir_datos_anteproyecto(char *user)
 {
 	//hacer validaciones al ingresar datos
-	registrar_anteproyecto_jd_1_arg = (anteproyecto_jd *)malloc(sizeof(usuario_jd));
+	registrar_anteproyecto_jd_1_arg = (anteproyecto_jd *)malloc(sizeof(anteproyecto_jd));
 	limpiar();
 	mostrar_usuario(user);
 
@@ -260,7 +260,6 @@ void pedir_datos_anteproyecto(char *user)
 	scanf("%10s", registrar_anteproyecto_jd_1_arg->fecha_registro);
 	printf("Fecha de aprobacion: ");
 	scanf("%12s", registrar_anteproyecto_jd_1_arg->fecha_aprobacion);
-
 
 	/* int opcion = 0;
 	do
@@ -309,20 +308,56 @@ void registrar_anteproyecto(char *user)
 void asignar_evaluadores(char *user)
 {
 	result3_jd = asignar_evaluadores_jd_1(&asignar_evaluadores_jd_1_arg, clnt_jd);
-	if (result3_jd == (char **) NULL) {
-		clnt_perror (clnt_jd, "call failed");
+	if (result3_jd == (char **)NULL)
+	{
+		clnt_perror(clnt_jd, "call failed");
 	}
 }
+
 void buscar_anteproyectos_jd(char *user)
 {
-	/*result_4 = buscar_anteproyecto_jd_1(&buscar_anteproyecto_jd_1_arg, clnt);
-	if (result_4 == (anteproyecto_completo_jd *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}*/
+	limpiar();
+	printf("Ingrese el código:");
+	scanf("%3s", buscar_anteproyecto_jd_1_arg);
+
+	result4_jd = buscar_anteproyecto_jd_1(&buscar_anteproyecto_jd_1_arg, clnt_jd);
+	if (result4_jd == (anteproyecto_completo_jd *)NULL)
+	{
+		clnt_perror(clnt_jd, "call failed");
+	}
+	else
+	{
+		printf("%3s", result4_jd->codigo);
+	}
+	espera();
 }
 void listar_anteproyectos(char *user)
 {
 	//estudiante direactor
+	result2_ed = listar_anteproyectos_ed_1((void *)&listar_anteproyectos_ed_1_arg, clnt_ed);
+	if (result2_ed == (nodo_anteproyecto_ed *)NULL)
+	{
+		clnt_perror(clnt_ed, "call failed");
+	}
+	else
+	{
+		int i = 0;
+		
+		printf("\n Listado de Anteproyectos \n");
+		while ((result2_ed) != NULL)
+		{
+			printf("\n\t\tAnteproyectos %i: ", i + 1);
+			printf("\nCódigo: %3s ", result2_ed->codigo);
+			printf("\nTitulo: %40s ", result2_ed->titulo);
+
+			result2_ed = result2_ed->nodo_siguiente;
+			i++;
+		}
+		if (i == 0)
+		{
+			printf("No existen anteproyectos registrados. \n");
+		}
+	}
 }
 void modificar_concepto_jd(char *user)
 {
@@ -350,10 +385,10 @@ void iniciar_menu_jd(char *user)
 			//asignar_evaluadores(user);
 			break;
 		case 4:
-			//buscar_anteproyecto_jd(user);
+			// buscar_anteproyectos_jd(user);
 			break;
 		case 5:
-			//listar_anteproyectos(user);
+			listar_anteproyectos(user);
 			break;
 		case 6:
 			//modificar_concepto_jd(user);
@@ -366,7 +401,7 @@ void iniciar_menu_jd(char *user)
 			printf("regresando....\n");
 			break;
 		default:
-			printf("Opcion no valida!, presione una tecla para continuar.");
+			printf("Opcion no valida!\n");
 			espera();
 		}
 	} while (opcion != 8);
@@ -500,7 +535,7 @@ void iniciar_sesion()
 		if (result1_is == (int *)NULL)
 		{
 			clnt_perror(clnt_is, "call failed");
-		}
+		} // TODO: Modificar esto
 		else if (iniciar_sesiones(1, "dodaniel") == -1)
 		{
 			printf("Datos incorrectos..\n");
