@@ -40,7 +40,7 @@ evaluadores_jd *asignar_evaluadores_jd_1_arg;
 anteproyecto_completo_jd *result4_jd;
 char *buscar_anteproyecto_jd_1_arg;
 char **result5_jd;
-datos_concepto_jd modificar_concepto_anteproyecto_jd_1_arg;
+datos_concepto_jd *modificar_concepto_anteproyecto_jd_1_arg;
 //----Estudiante- Director
 CLIENT *clnt_ed;
 anteproyecto_ed *result1_ed;
@@ -494,8 +494,26 @@ void listar_anteproyectos(char *user)
 		}
 	}
 }
+
+void datos_modificar_concepto(){
+	limpiar();
+	printf("\t\tModificar concepto proyecto\n\n");
+	printf("Codigo proytecto: ");
+	scanf("%3s", modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
+	printf("Codigo proytecto: ");
+	scanf("%20s", modificar_concepto_anteproyecto_jd_1_arg->concepto);
+}
 void modificar_concepto_jd(char *user)
 {
+	modificar_concepto_anteproyecto_jd_1_arg = (datos_concepto_jd *)malloc(sizeof(datos_concepto_jd));
+	datos_modificar_concepto();
+	result5_jd = modificar_concepto_anteproyecto_jd_1(modificar_concepto_anteproyecto_jd_1_arg, clnt_jd);
+	if (result5_jd == (char **) NULL) {
+		clnt_perror (clnt_jd, "call failed");
+	}else{
+		printf("Se ha modificado el concepto!\n");
+		espera();
+	}
 }
 void cambiar_contrasenia(char *user)
 {
@@ -526,7 +544,7 @@ void iniciar_menu_jd(char *user)
 			listar_anteproyectos(user);
 			break;
 		case 6:
-			//modificar_concepto_jd(user);
+			modificar_concepto_jd(user);
 			break;
 		case 7:
 			//cambiar_contrasenia(user);
