@@ -130,6 +130,16 @@ void espera()
 }
 
 /**
+ * @brief Se encarga de solicitar el código y retornarlo
+ * 
+ * @return char* 
+ */
+void pedir_codigo()
+{
+	limpiar();
+	printf("Ingrese el código:");
+}
+/**
  * @brief Imprime en pantalla el user
  * 
  * @param user 
@@ -332,28 +342,33 @@ void asignar_evaluadores(char *user)
 	if (result3_jd == (char **)NULL)
 	{
 		clnt_perror(clnt_jd, "call failed");
-	}else
+	}
+	else
 	{
 		printf("Se han asignado los evaluadores!");
 		espera();
 	}
-	
 }
 
 void buscar_anteproyectos_jd(char *user)
 {
-	limpiar();
-	printf("Ingrese el código:");
-	scanf("%3s", buscar_anteproyecto_jd_1_arg);
+	pedir_codigo();
+	buscar_anteproyecto_jd_1_arg = (char *)malloc(10);
+	scanf("%s", buscar_anteproyecto_jd_1_arg);
 
 	result4_jd = buscar_anteproyecto_jd_1(&buscar_anteproyecto_jd_1_arg, clnt_jd);
 	if (result4_jd == (anteproyecto_completo_jd *)NULL)
 	{
 		clnt_perror(clnt_jd, "call failed");
+		printf("Error");
 	}
-	else
+	else if(*(result4_jd)->codigo == -1)
 	{
-		printf("%3s", result4_jd->codigo);
+		printf("No se encontro ningun anteproyecto con ese codigo!");
+	}else{
+		printf("Hay datos");
+
+		printf("%s", result4_jd->codigo);
 	}
 	espera();
 }
@@ -443,6 +458,15 @@ void menu_ed(char *user)
 	printf("   2. Listar anteproyectos.\n");
 	printf("   3.cerrar Sesion.\n");
 }
+
+void buscar_anteproyecto(char *user)
+{
+	result1_ed = buscar_anteproyecto_ed_1(&buscar_anteproyecto_ed_1_arg, clnt_ed);
+	if (result1_ed == (anteproyecto_ed *)NULL)
+	{
+		clnt_perror(clnt_ed, "call failed");
+	}
+}
 void iniciar_menu_ed(char *user)
 {
 	int opcion = 0;
@@ -453,7 +477,7 @@ void iniciar_menu_ed(char *user)
 		switch (opcion)
 		{
 		case 1:
-			//buscar_anteproyecto(user);
+			buscar_anteproyecto(user);
 			break;
 		case 2:
 			//listar_anteproyectos(user);
