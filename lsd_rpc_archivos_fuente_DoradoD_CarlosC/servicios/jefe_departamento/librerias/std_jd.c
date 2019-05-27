@@ -7,7 +7,7 @@
 
 //Registra un usuario.
 char* register_user(usuario_jd *user, char* path){
-	static char *messaje;
+	char *messaje;
 	FILE *file;
 	int aux=0;
 
@@ -64,13 +64,12 @@ int registered_user(char* id,char* n_user,char *path){
 	}
 
 	fclose(file);
-	free(user);
 	return result;
 }
 
 //Registra un anteproyecto.
 char* register_draft(anteproyecto_jd *draft, char* path){
-	static char *messaje;
+	char *messaje;
 	FILE *file;
 	int aux=0;
 
@@ -84,7 +83,8 @@ char* register_draft(anteproyecto_jd *draft, char* path){
 			return messaje;
 		}
 		fwrite(draft, sizeof(anteproyecto_jd), 1, file);
-		strcpy(messaje,"Anteproyecto registrado.");
+		strcpy(messaje,"Anteproyecto registrado. Codigo: ");
+		strcat(messaje,draft->codigo);
 		fclose(file);
 	}else if(aux==1){
 		strcpy(messaje,"El codigo del anteproyecto ya esta registrado.");
@@ -116,13 +116,12 @@ int registered_draft(char* code,char *path){
 	}
 
 	fclose(file);
-	free(draft);
 	return result;
 }
 
 //Registra los evaluadores de un anteproyectos
 char* register_evaluators(evaluadores_jd *eval, char* path_draft,char* path_eval){
-	static char *messaje;
+	char *messaje;
 	FILE *file;
 	int aux=0;
 
@@ -173,15 +172,14 @@ int registered_draft_eval(char* code,char *path){
 	}
 
 	fclose(file);
-	free(eval);
 	return result;
 }
 
 //Buscar un anteproyecto
 anteproyecto_completo_jd * search_draft(char* code, char* path_draft,char* path_eval){
-	static anteproyecto_completo_jd * draft_complete;
-	static anteproyecto_jd * draft; 
-	static evaluadores_jd * eval;	
+	anteproyecto_completo_jd * draft_complete;
+	anteproyecto_jd * draft; 
+	evaluadores_jd * eval;	
 	
 	draft_complete=(anteproyecto_completo_jd*)malloc(sizeof(anteproyecto_completo_jd));
 	
@@ -211,14 +209,13 @@ anteproyecto_completo_jd * search_draft(char* code, char* path_draft,char* path_
 	strcpy(draft_complete->concepto_evaluador2,eval->concepto_evaluador2);
 	strcpy(draft_complete->fecha_revision2,eval->fecha_revision2);
 
-	free(draft);
-	free(eval);
+
 	return draft_complete;
 }
 
 //Bucar anteproyecto en anteproyectos
 anteproyecto_jd * search_draft_dr(char* code, char* path_draft){
-	static anteproyecto_jd *draft; 	
+	anteproyecto_jd *draft; 	
 	FILE *file;
 	
 	file=fopen(path_draft,"rb");
@@ -239,12 +236,11 @@ anteproyecto_jd * search_draft_dr(char* code, char* path_draft){
 	}
 	
 	fclose(file);
-	free(draft);
 	return draft_null();
 }
 //Declara un anteproyectos sin información
 anteproyecto_jd * draft_null(){
-	static anteproyecto_jd * draft;
+	anteproyecto_jd * draft;
 	
 	draft=(anteproyecto_jd*)malloc(sizeof(anteproyecto_jd));
 
@@ -266,7 +262,7 @@ anteproyecto_jd * draft_null(){
 } 
 //Buscar anteproyecto en evaluadores
 evaluadores_jd * search_draft_ev(char* code, char* path_eval){
-	static evaluadores_jd *eval; 	
+	evaluadores_jd *eval; 	
 	FILE *file;
 	
 	file=fopen(path_eval,"rb");
@@ -287,13 +283,12 @@ evaluadores_jd * search_draft_ev(char* code, char* path_eval){
 	}
 	
 	fclose(file);
-	free(eval);
 	return eval_null();
 }
 
 //Define evaluadores sin información
 evaluadores_jd * eval_null(){
-	static evaluadores_jd * eval;
+	evaluadores_jd * eval;
 	
 	eval=(evaluadores_jd*)malloc(sizeof(evaluadores_jd));
 
@@ -311,7 +306,7 @@ evaluadores_jd * eval_null(){
 
 //Modifica el concepto de un anteproyecto
 char * modify_concept_draft(char* code, int concept, char* path_draft){
-	static char* messaje;
+	char* messaje;
 	anteproyecto_jd *draft;
 	FILE *file;
 
@@ -340,7 +335,6 @@ char * modify_concept_draft(char* code, int concept, char* path_draft){
 		fread(draft, sizeof(anteproyecto_jd), 1, file);
 	}
 	fclose(file);
-	free(draft);
 	return messaje;
 	
 }

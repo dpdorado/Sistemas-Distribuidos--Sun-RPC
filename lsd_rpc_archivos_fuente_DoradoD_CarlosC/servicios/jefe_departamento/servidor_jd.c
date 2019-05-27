@@ -23,11 +23,11 @@ char **
 registrar_anteproyecto_jd_1_svc(anteproyecto_jd *argp, struct svc_req *rqstp)
 {
 	static char * result;
-
+	printf("%s\n",argp->codigo);
 	result=(char*)malloc(sizeof(char)*50);
 	
 	strcpy(result,register_draft(argp, "./informacion/anteproyectos.dat"));
-
+	
 	return &result;
 }
 

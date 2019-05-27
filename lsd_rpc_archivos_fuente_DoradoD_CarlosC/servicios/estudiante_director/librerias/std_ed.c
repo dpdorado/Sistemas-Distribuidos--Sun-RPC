@@ -8,7 +8,7 @@
 
 //Bucar anteproyecto en anteproyectos
 anteproyecto_ed * search_draft(char* code, char* path_draft){
-	static anteproyecto_ed *draft; 	
+	anteproyecto_ed *draft; 	
 	FILE *file;
 	
 	file=fopen(path_draft,"rb");
@@ -29,12 +29,11 @@ anteproyecto_ed * search_draft(char* code, char* path_draft){
 	}
 	
 	fclose(file);
-	free(draft);
 	return draft_null();
 }
 //Declara un anteproyectos sin información
 anteproyecto_ed * draft_null(){
-	static anteproyecto_ed * draft;
+	anteproyecto_ed * draft;
 	
 	draft=(anteproyecto_ed*)malloc(sizeof(anteproyecto_ed));
 
@@ -91,7 +90,6 @@ nodo_anteproyecto_ed * list_draft(char* path_draft){
 	}
 	
 	fclose(file);
-	free(draft);
 	return cabeza;
 }
 //Cabeza de la lista sin infoemación

@@ -205,13 +205,13 @@ void listar_anteproyectos(char *user)
 	{
 		clnt_perror(clnt_ed, "call failed");
 	}
-
 	else if (strcmp(result2_ed->codigo,"-1")!=0){
 		
-		printf("\n Listado de Anteproyectos \n");
+		printf("\n**********Listado de Anteproyectos**********\n");
+		mostrar_usuario(user);		
 		while (result2_ed != NULL)
 		{
-			printf("\n\t\tAnteproyecto%i\n", i + 1);
+			printf("\n\t\tAnteproyecto %i\n", i + 1);
 			printf("Código: %s \n", result2_ed->codigo);
 			printf("Titulo: %s \n", result2_ed->titulo);
 
@@ -230,7 +230,7 @@ void buscar_anteproyecto(char *user)
 {
 	limpiar();
 	buscar_anteproyecto_ed_1_arg = (char *)malloc(sizeof(char *));
-	printf("\t\tBuscar anteproyecto\n\n");
+	printf("**************Buscar anteproyecto******************\n");
 	pedir_codigo();
 	scanf("%s", buscar_anteproyecto_ed_1_arg);
 
@@ -238,7 +238,7 @@ void buscar_anteproyecto(char *user)
 	if (result1_ed == (anteproyecto_ed *)NULL)
 	{
 		clnt_perror(clnt_ed, "call failed");
-	}else{
+	}else if (strcmp(result1_ed->codigo,"-1")!=0){
 
 		printf("\tDATOS DE ANTEPROYECTO\n\n");
 		// Datos del anteproyecto
@@ -256,6 +256,8 @@ void buscar_anteproyecto(char *user)
 		imprimir_estado(result1_ed->estado);
 
 		printf("Numero de revision: %d\n",result1_ed->numero_revision);
+	}else{
+		printf("No se encontro el anteproyectos.\n");
 	}
 }
 void iniciar_menu_ed(char *user)
@@ -284,6 +286,9 @@ void iniciar_menu_ed(char *user)
 	} while (opcion != 3);
 }
 
+void limpiar_buffer(){
+	fflush(stdin);
+}
 
 /**************************************************************************Jefe de Departamento****************************************************/
 /**
@@ -302,7 +307,8 @@ void menu_jd(char *user)
 	printf("   4. Buscar anteproyecto.\n");
 	printf("   5. Listar anteproyectos.\n");
 	printf("   6. Modificar concepto de anteproyecto.\n");
-	printf("   7. Cerrar Sesion.\n");
+	printf("   7. Cambiar contraseña.\n");
+	printf("   8. Cerrar Sesion.\n");
 }
 
 void cambiar_contrasenia(char *user)
@@ -339,12 +345,19 @@ void pedir_datos_usuario(char *user)
 	mostrar_usuario(user);
 	printf("Identificación: ");
 	scanf("%10s", datos_reg_user->identificacion);
+	limpiar_buffer();
+
 	printf("Nombre y apellido: ");
 	scanf("%30s", datos_reg_user->nombre_apellido);
+	limpiar_buffer();
+	
 	printf("Nombre de usuario: ");
 	scanf("%10s", datos_reg_user->nom_user);
+	limpiar_buffer();
+	
 	printf("Contraseña: ");
 	scanf("%10s", datos_reg_user->contrasenia);
+	limpiar_buffer();
 
 	// Validamos que elija una de las opciones correctas
 	int tipo = 0;
@@ -361,7 +374,7 @@ void pedir_datos_usuario(char *user)
 
 	} while (tipo != 1 && tipo != 2 && tipo != 3);
 	datos_reg_user->tipo_user = tipo;
-
+	
 	/* printf("id: %s \n", datos_reg_user->identificacion);
 	printf("NombreApellido %s \n", datos_reg_user->nombre_apellido);
 	printf("NombreUser %s \n", datos_reg_user->nom_user);
@@ -383,7 +396,7 @@ void registrar_usuario(char *user)
 		printf("%s\n", *result1_jd);
 		espera();
 	}
-	free(datos_reg_user);
+	//free(datos_reg_user);
 }
 
 /**
@@ -393,6 +406,8 @@ void registrar_usuario(char *user)
  */
 void pedir_datos_anteproyecto(char *user)
 {
+	int aux=0;
+
 	//hacer validaciones al ingresar datos
 	registrar_anteproyecto_jd_1_arg = (anteproyecto_jd *)malloc(sizeof(anteproyecto_jd));
 	limpiar();
@@ -400,63 +415,66 @@ void pedir_datos_anteproyecto(char *user)
 
 	// Generamos un código aleatorio
 	srand(time(NULL));
-	char c[3] = {'0', '0', '0'};
-	for (int i = 0; i < sizeof(registrar_anteproyecto_jd_1_arg->codigo) / sizeof(*registrar_anteproyecto_jd_1_arg->codigo); i++)
+	char c[4];
+	c[3]='\n';
+	for (int i = 0; i < 3; i++)
 	{
 		c[i] = '0' + (rand() % 10);
 	}
-	strcat(registrar_anteproyecto_jd_1_arg->codigo, c);
+	
+	printf("%s\n",c);
+	//strcpy(code,c);
+	
+	//code_p=rand()%901+100;
+	//sprintf(code,"%d",code_p);
+	//printf("%s\n",code);
+	
+	
+	do{
+		printf("Modalidad: \n");
+		printf("1. Trabajo de investigación.		2. Practica profesional :");
+		scanf("%d",&aux);
+	}while(aux!=1 && aux!=2);
+
+	strcpy(registrar_anteproyecto_jd_1_arg->modalidad,(aux==1?"T.I":"P.P"));
+	limpiar_buffer();
+
+	printf("Título: ");
+	scanf("%40s", registrar_anteproyecto_jd_1_arg->titulo);
+	limpiar_buffer();
+	
+	strcpy(registrar_anteproyecto_jd_1_arg->codigo, c);
+	limpiar_buffer();
+
+	printf("Estudiante 1: ");
+	scanf("%30s", registrar_anteproyecto_jd_1_arg->nombre_estud1);
+	limpiar_buffer();
+
+	printf("Estudiante 2: ");
+	scanf("%30s", registrar_anteproyecto_jd_1_arg->nombre_estud2);
+	limpiar_buffer();
+
+	printf("Director: ");
+	scanf("%30s", registrar_anteproyecto_jd_1_arg->director);
+	limpiar_buffer();
+
+	printf("Co-Director: ");
+	scanf("%30s", registrar_anteproyecto_jd_1_arg->co_director);
+	limpiar_buffer();
+
+	printf("Fecha de registro: ");
+	scanf("%10s", registrar_anteproyecto_jd_1_arg->fecha_registro);
+	limpiar_buffer();
+
+	printf("Fecha de aprobacion: ");
+	scanf("%12s", registrar_anteproyecto_jd_1_arg->fecha_aprobacion);
+	limpiar_buffer();
 
 	// Valores por defecto
 	registrar_anteproyecto_jd_1_arg->concepto = 2;
 	registrar_anteproyecto_jd_1_arg->estado = 1;
 	registrar_anteproyecto_jd_1_arg->numero_revision = 0;
 
-	printf("Modalidad: ");
-	scanf("%12s", registrar_anteproyecto_jd_1_arg->modalidad);
-	printf("Título: ");
-	scanf("%40s", registrar_anteproyecto_jd_1_arg->titulo);
-	printf("Estudiante 1: ");
-	scanf("%30s", registrar_anteproyecto_jd_1_arg->nombre_estud1);
-	printf("Estudiante 2: ");
-	scanf("%30s", registrar_anteproyecto_jd_1_arg->nombre_estud2);
-	printf("Director: ");
-	scanf("%30s", registrar_anteproyecto_jd_1_arg->director);
-	printf("Director: ");
-	scanf("%30s", registrar_anteproyecto_jd_1_arg->co_director);
-	printf("Fecha de registro: ");
-	scanf("%10s", registrar_anteproyecto_jd_1_arg->fecha_registro);
-	printf("Fecha de aprobacion: ");
-	scanf("%12s", registrar_anteproyecto_jd_1_arg->fecha_aprobacion);
-
-	/* int opcion = 0;
-	do
-	{
-		printf("Concepto:  1=Aprobado  2=No aprobado");
-		opcion = ingresar_opcion();
-		if(opcion !1 && opcion != 2){
-			printf("\nError, debe elegir un valor correcto. [1, 2]\n\n");
-			printf("Elija una opcion de las siguientes.\n");
-		}
-	} while (opcion != 1 && opcion != 2); 
-	registrar_anteproyecto_jd_1_arg->concepto = opcion;*/
-	/* 
-	do
-	{
-		opcion = 0;
-		printf("Estado\n");
-		printf("1=> Sin asignación\n2=> Evaluadores asignados\n3 => En revisión\n4=> Evaluado");
-		opcion = ingresar_opcion();
-
-		if (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4)
-		{
-			printf("\nError, debe elegir un valor correcto. [1, 2]\n\n");
-			printf("Elija una opcion de las siguientes.\n");
-		}
-		
-	} while (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4); 
-	
-	registrar_anteproyecto_jd_1_arg->estado = opcion;*/
 }
 /**
  * @brief Pide al jp los datos del anteproyectos
@@ -475,7 +493,6 @@ void registrar_anteproyecto(char *user)
 		printf("%s\n", *result2_jd);
 		espera();
 	}
-	free(registrar_anteproyecto_jd_1_arg);
 }
 
 void pedir_datos_evaluadores()
@@ -570,9 +587,9 @@ void datos_modificar_concepto()
 	int opcion;
 	char concepto[20];
 	limpiar();
-	printf("\t\tModificar concepto anteproyecto\n\n");
+	printf("****Modificar concepto anteproyecto****\n");
 	printf("Codigo: ");
-	scanf("%3s", modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
+	scanf("%6s", modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
 	printf("Concepto: ");
 	do{
 		printf("1. Aprobado 	2. No aprobado\n");
@@ -595,7 +612,6 @@ void modificar_concepto_jd(char *user)
 		printf("%s\n", *result5_jd);
 		espera();
 	}
-	free(modificar_concepto_anteproyecto_jd_1_arg);
 }
 
 void iniciar_menu_jd(char *user)
@@ -736,26 +752,28 @@ void pedir_datos(datos_login_is *datos_usuario)
 	printf("************Inicio de sesion***********\n");
 	printf("Nombre de usuario:	");
 	scanf("%10s", datos_usuario->nom_user);
+	limpiar_buffer();
 	printf("Contrseña:	");
 	scanf("%10s", datos_usuario->contrasenia);
+	limpiar_buffer();
 }
 
 int iniciar_sesiones(int opcion, char *user)
 {
 	switch (opcion)
 	{
-	case 1:
-		iniciar_menu_jd(user);
-		break;
-	case 2:
-		iniciar_menu_ed(user);
-		break;
-	case 3:
-		iniciar_menu_e(user);
-		break;
-	default:
-		printf("Datos incorrectos..\n");
-		return -1;
+		case 1:
+			iniciar_menu_jd(user);
+			break;
+		case 2:
+			iniciar_menu_ed(user);
+			break;
+		case 3:
+			iniciar_menu_e(user);
+			break;
+		default:
+			printf("Datos incorrectos..\n");
+			return -1;
 	}
 	return 0;
 }
@@ -764,30 +782,30 @@ int iniciar_sesiones(int opcion, char *user)
 void iniciar_sesion()
 {
 	int bandera = 0;
-
+	
 	do
 	{
+		
 		pedir_datos(&datos_usuario);
 
 		result1_is = iniciar_sesion_is_1(&datos_usuario, clnt_is);
 		if (result1_is == (int *)NULL)
 		{
 			clnt_perror(clnt_is, "call failed");
-		espera();
 		}
 		else if (iniciar_sesiones(*result1_is, datos_usuario.nom_user) == -1){
 			printf("1-> volver a intentarlo\n");
 			printf("2-> regresar\n");
 			bandera = ingresar_opcion();
 		}else{
-			printf("Inicio correcto\n");
+			//printf("Inicio correcto\n");
 			bandera=2;
 		}
 
 		strcpy(datos_usuario.nom_user, "");
 		strcpy(datos_usuario.contrasenia, "");
+		*result1_is=-1;
 	} while (bandera == 1);
-	free(result1_is);
 }
 
 

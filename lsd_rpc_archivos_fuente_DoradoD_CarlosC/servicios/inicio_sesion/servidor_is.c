@@ -15,12 +15,18 @@ iniciar_sesion_is_1_svc(datos_login_is *argp, struct svc_req *rqstp)
 	static int  result;	
 	retorno_is *ret;
 
+	//printf("user: %s\n",argp->nom_user);
+	//printf("contraseña: %s\n",argp->contrasenia);
+
 	ret=(retorno_is*)malloc(sizeof(retorno_is));
 
 	ret=logeo(argp, "./informacion/usuarios.dat", "./informacion/admin.dat");
 	
 	result=ret->tipo_user;
-		
+	//printf("hola cacorro..\n");
+
+
+	printf("%d\n",ret->tipo_user);
 	free(ret);
 	return &result;
 }
