@@ -136,7 +136,6 @@ void espera()
  */
 void pedir_codigo()
 {
-	limpiar();
 	printf("Ingrese el código:");
 }
 /**
@@ -463,7 +462,6 @@ void buscar_anteproyectos_jd(char *user)
 		printf("Fecha Revision 2: %s\n", result4_jd->fecha_revision2);
 
 	}
-	free(result4_jd);
 	espera();
 }
 void listar_anteproyectos(char *user)
@@ -482,8 +480,8 @@ void listar_anteproyectos(char *user)
 		while ((result2_ed) != NULL)
 		{
 			printf("\n\t\tAnteproyectos %i\n ", i + 1);
-			printf("Código: %3s \n", result2_ed->codigo);
-			printf("Titulo: %40s \n", result2_ed->titulo);
+			printf("Código: %s \n", result2_ed->codigo);
+			printf("Titulo: %s \n", result2_ed->titulo);
 
 			result2_ed = result2_ed->nodo_siguiente;
 			i++;
@@ -547,17 +545,17 @@ void iniciar_menu_jd(char *user)
 			modificar_concepto_jd(user);
 			break;
 		case 7:
-			//cambiar_contrasenia(user);
-			break;
-
-		case 8:
 			printf("regresando....\n");
 			break;
+
+		/* case 8:
+			cambiar_contrasenia(user);
+			break; */
 		default:
 			printf("Opcion no valida!\n");
 			espera();
 		}
-	} while (opcion != 8);
+	} while (opcion != 7);
 }
 
 /*----------------------------Estudiante -Director-------------------------*/
@@ -573,8 +571,11 @@ void menu_ed(char *user)
 
 void buscar_anteproyecto(char *user)
 {
-
+	limpiar();
+	buscar_anteproyecto_ed_1_arg = (char *)malloc(sizeof(char *));
+	printf("\t\tBuscar anteproyecto\n\n");
 	pedir_codigo();
+	scanf("%s", buscar_anteproyecto_ed_1_arg);
 
 	result1_ed = buscar_anteproyecto_ed_1(&buscar_anteproyecto_ed_1_arg, clnt_ed);
 	if (result1_ed == (anteproyecto_ed *)NULL)
@@ -702,19 +703,24 @@ void iniciar_sesion()
 		if (result1_is == (int *)NULL)
 		{
 			clnt_perror(clnt_is, "call failed");
-		} // TODO: Modificar esto
-		else if (iniciar_sesiones(1, "dodaniel") == -1)
+			espera();
+		}else if (iniciar_sesiones(*result1_is, datos_usuario.nom_user) == -1)
 		{
 			printf("Datos incorrectos..\n");
 
 			printf("1-> volver a intentarlo\n");
 			printf("2-> regresar\n");
 			bandera = ingresar_opcion();
-		}
-		else if (iniciar_sesiones(*result1_is, datos_usuario.nom_user) == -1)
-		{
 			//scanf("%d",&bandera);
 		}
+		/* else if (iniciar_sesiones(2, "dodaniel") == -1)
+		{
+			printf("Datos incorrectos..\n");
+
+			printf("1-> volver a intentarlo\n");
+			printf("2-> regresar\n");
+			bandera = ingresar_opcion();
+		} */
 		else
 		{
 			printf("Inicio correcto\n");
