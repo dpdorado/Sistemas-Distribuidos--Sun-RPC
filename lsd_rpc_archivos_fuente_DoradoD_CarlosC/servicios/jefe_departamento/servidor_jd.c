@@ -31,17 +31,19 @@ registrar_anteproyecto_jd_1_svc(anteproyecto_jd *argp, struct svc_req *rqstp)
 	
 	int code=0;
 	char* codigo;
-	code=rand()%901+100;
-	codigo=(char*)malloc(sizeof(char)*3);	
-
-	sprintf(codigo,"%d",code);	
-
-	strcpy(argp->codigo,codigo);
-
-	result=(char*)malloc(sizeof(char)*50);
 	
-	strcpy(result,register_draft(argp, "./informacion/anteproyectos.dat"));
+	do{		
+		code=rand()%901+100;
+		codigo=(char*)malloc(sizeof(char)*3);	
+
+		sprintf(codigo,"%d",code);	
+
+		strcpy(argp->codigo,codigo);
+
+		result=(char*)malloc(sizeof(char)*50);
 	
+		strcpy(result,register_draft(argp, "./informacion/anteproyectos.dat"));
+	}while(strcmp(result,"El codigo del anteproyecto ya esta registrado.")==0);
 	return &result;
 }
 
@@ -74,14 +76,14 @@ modificar_concepto_anteproyecto_jd_1_svc(datos_concepto_jd *argp, struct svc_req
 {
 	static char * result;
 	int concept=0;
-	
+	char* aux;	
+
 	if (strcmp("1", argp->concepto)==0){
 		concept=1;
 	}else if(strcmp("2", argp->concepto)==0){
 		concept=2;
 	}
-	printf("codigo: %s\n",argp->codigo_proyecto);
-	printf("concepto: %s\n",argp->concepto);	
+	
 	
 	result=(char*)malloc(sizeof(char)*50);
 	

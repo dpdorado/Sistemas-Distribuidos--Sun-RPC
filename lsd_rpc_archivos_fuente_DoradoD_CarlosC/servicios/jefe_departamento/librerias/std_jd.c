@@ -325,8 +325,7 @@ char * modify_concept_draft(char* code, int concept, char* path_draft){
 	fread(draft, sizeof(anteproyecto_jd), 1, file);
 
 	while(!feof(file)){
-		printf("--codigo: %s\n",draft->codigo);
-		if (strcmp(code,draft->codigo)==0){
+		if (strncmp(code,draft->codigo,3)==0){
 			int pos = ftell(file)-sizeof(anteproyecto_jd);
 			fseek(file,pos,SEEK_SET);
 			draft->concepto=concept;

@@ -25,7 +25,7 @@ char * modify_concept_eval(datos_concepto_e *datas,char* path_eval){
 	fread(eval, sizeof(evaluadores_e), 1, file);
 
 	while(!feof(file)){
-		if (strcmp(datas->codigo_proyecto,eval->codigo_anteproyecto)==0){
+		if (strncmp(datas->codigo_proyecto,eval->codigo_anteproyecto,3)==0){
 			int pos = ftell(file)-sizeof(evaluadores_e);
 			fseek(file,pos,SEEK_SET);
 			if (datas->eval_numero==1){

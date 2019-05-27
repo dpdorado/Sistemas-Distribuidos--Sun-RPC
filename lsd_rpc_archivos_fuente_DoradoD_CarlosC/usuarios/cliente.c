@@ -209,7 +209,7 @@ void listar_anteproyectos(char *user)
 		
 		printf("\n**********Listado de Anteproyectos**********\n");
 		mostrar_usuario(user);		
-		while ((*result2_ed) != NULL)
+		do
 		{
 			printf("\n\t\tAnteproyecto %i\n", i + 1);
 			printf("Código: %s \n", (*result2_ed)->codigo);
@@ -217,7 +217,7 @@ void listar_anteproyectos(char *user)
 
 			(*result2_ed) = (*result2_ed)->nodo_siguiente;
 			i++;
-		}
+		}while((*result2_ed) != NULL);
 		
 	}
 	if (i == 0){
@@ -231,6 +231,7 @@ void buscar_anteproyecto(char *user)
 	limpiar();
 	buscar_anteproyecto_ed_1_arg = (char *)malloc(sizeof(char *));
 	printf("**************Buscar anteproyecto******************\n");
+	mostrar_usuario(user);
 	pedir_codigo();
 	scanf("%s", buscar_anteproyecto_ed_1_arg);
 
@@ -259,6 +260,7 @@ void buscar_anteproyecto(char *user)
 	}else{
 		printf("No se encontro el anteproyectos.\n");
 	}
+	espera();
 }
 void iniciar_menu_ed(char *user)
 {
@@ -280,8 +282,9 @@ void iniciar_menu_ed(char *user)
 			break;
 		default:
 			printf("Opcion no valida!\n");
+			espera();
 		}
-		espera();
+		
 
 	} while (opcion != 3);
 }
@@ -317,7 +320,7 @@ void cambiar_contrasenia(char *user)
 	printf("************Cambio de contraseña***********\n");
 	printf("Nombre de usuario:	");
 	scanf("%10s", datos_cambio_contrasenia_is.nom_user);
-	printf("Contrseña:	");
+	printf("Contrseña actual:	");
 	scanf("%10s", datos_cambio_contrasenia_is.contrasenia);
 	printf("Nueva contrseña:	");
 	scanf("%10s", datos_cambio_contrasenia_is.nueva_contrasenia);
@@ -473,30 +476,47 @@ void registrar_anteproyecto(char *user)
 	}
 }
 
-void pedir_datos_evaluadores()
+void pedir_datos_evaluadores(char *user)
 {
+	int opcion=0;
 	limpiar();
 	asignar_evaluadores_jd_1_arg = (evaluadores_jd *)malloc(sizeof(evaluadores_jd));
-	printf("\t\tAsignacion de evaluadores\n\n");
+	printf("*****Asignacion de evaluadores*****\n");
+	mostrar_usuario(user);
 	printf("Código del anteproyecto: ");
 	scanf("%12s", asignar_evaluadores_jd_1_arg->codigo_anteproyecto);
 	printf("Nombre del evaluador 1: ");
 	scanf("%30s", asignar_evaluadores_jd_1_arg->nombre_evaluador1);
+
 	printf("Concepto del evaluador 1: ");
-	scanf("%20s", asignar_evaluadores_jd_1_arg->concepto_evaluador1);
+	do{
+		printf("1. Aprobado 	2. No aprobado\n");
+		opcion = ingresar_opcion();
+		limpiar_buffer();
+		
+	}while(opcion != 1 && opcion!=2);
+	strcpy(asignar_evaluadores_jd_1_arg->concepto_evaluador1,(opcion==1?"APROBADO":"NO_APROBADO"));
+
 	printf("Fecha de revision 1: ");
 	scanf("%10s", asignar_evaluadores_jd_1_arg->fecha_revision1);
-
 	printf("Nombre del evaluador 2: ");
 	scanf("%30s", asignar_evaluadores_jd_1_arg->nombre_evaluador2);
+
 	printf("Concepto del evaluador 2: ");
-	scanf("%20s", asignar_evaluadores_jd_1_arg->concepto_evaluador2);
+	do{
+		printf("1. Aprobado 	2. No aprobado\n");
+		opcion = ingresar_opcion();
+		limpiar_buffer();
+		
+	}while(opcion != 1 && opcion!=2);
+	strcpy(asignar_evaluadores_jd_1_arg->concepto_evaluador2,(opcion==1?"APROBADO":"NO_APROBADO"));
+	
 	printf("Fecha de revision 2: ");
 	scanf("%10s", asignar_evaluadores_jd_1_arg->fecha_revision2);
 }
 void asignar_evaluadores(char *user)
 {
-	pedir_datos_evaluadores();
+	pedir_datos_evaluadores(user);
 	result3_jd = asignar_evaluadores_jd_1(asignar_evaluadores_jd_1_arg, clnt_jd);
 	if (result3_jd == (char **)NULL)
 	{
@@ -507,11 +527,13 @@ void asignar_evaluadores(char *user)
 		printf("%s\n", *result3_jd);
 		espera();
 	}
-	free(asignar_evaluadores_jd_1_arg);
 }
 
 void buscar_anteproyectos_jd(char *user)
 {
+	limpiar();
+	printf("****Buscar anteproyecto****\n");
+	mostrar_usuario(user);
 	pedir_codigo();
 	buscar_anteproyecto_jd_1_arg = (char *)malloc(10);
 	scanf("%s", buscar_anteproyecto_jd_1_arg);
@@ -558,16 +580,16 @@ void buscar_anteproyectos_jd(char *user)
 	espera();
 }
 
-void datos_modificar_concepto()
+void datos_modificar_concepto(char *user)
 {
 	int opcion;
-	char concepto[20];
+	char codigo[3];
 	limpiar();
 	printf("****Modificar concepto anteproyecto****\n");
+	mostrar_usuario(user);
 	printf("Codigo: ");
 	scanf("%3s", modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
 	limpiar_buffer();
-	printf("--:%s\n",modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
 	printf("Concepto: ");
 	do{
 		printf("1. Aprobado 	2. No aprobado\n");
@@ -575,15 +597,13 @@ void datos_modificar_concepto()
 		limpiar_buffer();
 		
 	}while(opcion != 1 && opcion!=2);
-	printf("--:%s\n",modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
-	//sprintf(modificar_concepto_anteproyecto_jd_1_arg->concepto,"%d",opcion);	
-	strcpy(modificar_concepto_anteproyecto_jd_1_arg->concepto,(opcion==1?"1":"2"));
-	printf("--:%s\n",modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
+	strcpy(modificar_concepto_anteproyecto_jd_1_arg->concepto,(opcion==1?"APROBADO":"NO_APROBADO"));
+
 }
 void modificar_concepto_jd(char *user)
 {
 	modificar_concepto_anteproyecto_jd_1_arg = (datos_concepto_jd *)malloc(sizeof(datos_concepto_jd));
-	datos_modificar_concepto();
+	datos_modificar_concepto(user);
 	result5_jd = modificar_concepto_anteproyecto_jd_1(modificar_concepto_anteproyecto_jd_1_arg, clnt_jd);
 	if (result5_jd == (char **)NULL)
 	{
@@ -653,7 +673,7 @@ void datos_modificar_concepto_e(){
 	int opcion;
 	char concepto[20];
 	limpiar();
-	printf("\t\tModificar concepto anteproyecto\n\n");
+	printf("*****Modificar concepto anteproyecto*****\n");
 	printf("Codigo: ");
 	scanf("%3s", ingresar_concepto_anteproyecto_e_1_arg.codigo_proyecto);
 	printf("Concepto: ");

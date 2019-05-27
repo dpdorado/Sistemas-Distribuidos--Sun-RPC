@@ -12,8 +12,6 @@ buscar_anteproyecto_ed_1_svc(char **argp, struct svc_req *rqstp)
 {
 	static anteproyecto_ed  *result;
 
-	printf("codigo:%s\n",*argp);
-
 	result=(anteproyecto_ed*)malloc(sizeof(anteproyecto_ed));
 	
 	result = search_draft(*argp, "./informacion/anteproyectos.dat");

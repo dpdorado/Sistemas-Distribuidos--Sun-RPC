@@ -18,7 +18,7 @@ retorno_is* logeo(datos_login_is * datas, char* path_user, char *path_admin){
 	ret=(retorno_is*)malloc(sizeof(retorno_is));	
 	strcpy(ret->messaje,"No se pudo iniciar sesion.");
 	ret->tipo_user=-1;
-	printf("inicio por defectos -1: %d\n",ret->tipo_user);
+
 	var_con=esta_en_admin(datas,path_admin);
 	//printf("es admin: %d\n",var_con);	
 	if (var_con==1){

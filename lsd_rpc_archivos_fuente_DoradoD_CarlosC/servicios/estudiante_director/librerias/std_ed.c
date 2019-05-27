@@ -62,8 +62,8 @@ anteproyecto_ed * draft_null(){
 prox_nodo_anteproyecto_ed * list_draft(char* path_draft){
 	anteproyecto_ed *draft; 	
 	FILE *file;
-	static prox_nodo_anteproyecto_ed cabeza = NULL;
-	prox_nodo_anteproyecto_ed sig_anteproyecto;
+	static prox_nodo_anteproyecto_ed retorno=NULL;	
+	prox_nodo_anteproyecto_ed cabeza = NULL,sig_anteproyecto;
 	prox_nodo_anteproyecto_ed nuevo_anteproyecto;
 	
 	file=fopen(path_draft,"rb");
@@ -72,11 +72,11 @@ prox_nodo_anteproyecto_ed * list_draft(char* path_draft){
 	}
 	
 	draft=(anteproyecto_ed*)malloc(sizeof(anteproyecto_ed));
-	nuevo_anteproyecto=(prox_nodo_anteproyecto_ed)malloc(sizeof(nodo_anteproyecto_ed));
 	
 	fread(draft, sizeof(anteproyecto_ed), 1, file);
 
 	while(!feof(file)){
+		nuevo_anteproyecto=(prox_nodo_anteproyecto_ed)malloc(sizeof(nodo_anteproyecto_ed));
 		strcpy(nuevo_anteproyecto->titulo,draft->titulo);
 		strcpy(nuevo_anteproyecto->codigo,draft->codigo);
 		if (cabeza==NULL)
@@ -94,7 +94,8 @@ prox_nodo_anteproyecto_ed * list_draft(char* path_draft){
 	}
 	
 	fclose(file);
-	return &cabeza;
+	retorno=cabeza;
+	return &retorno;
 }
 //Cabeza de la lista sin infoemación
 nodo_anteproyecto_ed * node_draft_null(){
