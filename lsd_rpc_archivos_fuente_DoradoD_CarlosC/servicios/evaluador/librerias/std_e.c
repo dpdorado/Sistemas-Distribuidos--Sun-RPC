@@ -39,11 +39,13 @@ char * modify_concept_eval(datos_concepto_e *datas,char* path_eval){
 			fwrite(eval, sizeof(evaluadores_e), 1, file);
 			strcpy(messaje,"Se modifico elconcepto.");
 			fclose(file);
+			free(eval);
 			return messaje;
 		}
 		fread(eval, sizeof(evaluadores_e), 1, file);
 	}
 	fclose(file);
+	free(eval);
 	return messaje;
 	
 }

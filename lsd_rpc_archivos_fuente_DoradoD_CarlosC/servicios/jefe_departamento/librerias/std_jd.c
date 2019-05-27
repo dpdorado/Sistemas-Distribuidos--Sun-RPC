@@ -14,6 +14,12 @@ char* register_user(usuario_jd *user, char* path){
 	messaje = (char*)malloc(sizeof(char)*50);
 	strcpy(messaje,"No se pudo registrar al usuario.");
 
+
+	if(user->tipo_user==1){
+		strcpy(messaje,"No se pueden  registrar administradores.");
+		return messaje;
+	}
+
 	aux=registered_user(user->identificacion, user->nom_user,path);	
 	if (aux==0){
 		file=fopen(path,"ab");
@@ -35,7 +41,7 @@ char* register_user(usuario_jd *user, char* path){
 int registered_user(char* id,char* n_user,char *path){
 	FILE *file;
 	usuario_jd *user;
-	int result=3;
+	int result=0;
 
 	file=fopen(path,"rb");
 	if (file==NULL){
@@ -57,11 +63,8 @@ int registered_user(char* id,char* n_user,char *path){
 		fread(user, sizeof(usuario_jd), 1, file);
 	}
 
-	if (result != 1 && result!=2){
-		result=0;
-	}
-
 	fclose(file);
+	free(user);
 	return result;
 }
 
@@ -93,7 +96,7 @@ char* register_draft(anteproyecto_jd *draft, char* path){
 int registered_draft(char* code,char *path){
 	FILE *file;
 	anteproyecto_jd *draft;
-	int result=2;
+	int result=0;
 
 	file=fopen(path,"rb");
 	if (file==NULL){
@@ -112,11 +115,8 @@ int registered_draft(char* code,char *path){
 		fread(draft, sizeof(usuario_jd), 1, file);
 	}
 
-	if (result != 1){
-		result=0;
-	}
-
 	fclose(file);
+	free(draft);
 	return result;
 }
 
@@ -153,7 +153,7 @@ char* register_evaluators(evaluadores_jd *eval, char* path_draft,char* path_eval
 int registered_draft_eval(char* code,char *path){
 	FILE *file;
 	evaluadores_jd *eval;
-	int result=2;
+	int result=0;
 
 	file=fopen(path,"rb");
 	if (file==NULL){
@@ -172,11 +172,8 @@ int registered_draft_eval(char* code,char *path){
 		fread(eval, sizeof(evaluadores_jd), 1, file);
 	}
 
-	if (result != 1){
-		result=0;
-	}
-
 	fclose(file);
+	free(eval);
 	return result;
 }
 
@@ -214,6 +211,8 @@ anteproyecto_completo_jd * search_draft(char* code, char* path_draft,char* path_
 	strcpy(draft_complete->concepto_evaluador2,eval->concepto_evaluador2);
 	strcpy(draft_complete->fecha_revision2,eval->fecha_revision2);
 
+	free(draft);
+	free(eval);
 	return draft_complete;
 }
 
@@ -240,6 +239,7 @@ anteproyecto_jd * search_draft_dr(char* code, char* path_draft){
 	}
 	
 	fclose(file);
+	free(draft);
 	return draft_null();
 }
 //Declara un anteproyectos sin información
@@ -287,6 +287,7 @@ evaluadores_jd * search_draft_ev(char* code, char* path_eval){
 	}
 	
 	fclose(file);
+	free(eval);
 	return eval_null();
 }
 
@@ -339,6 +340,7 @@ char * modify_concept_draft(char* code, int concept, char* path_draft){
 		fread(draft, sizeof(anteproyecto_jd), 1, file);
 	}
 	fclose(file);
+	free(draft);
 	return messaje;
 	
 }
