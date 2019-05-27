@@ -375,7 +375,8 @@ void imprimir_estado(int estado)
 	}
 }
 
-void imprimir_concepto(int concepto){
+void imprimir_concepto(int concepto)
+{
 	switch (concepto)
 	{
 	case 1:
@@ -384,7 +385,7 @@ void imprimir_concepto(int concepto){
 	case 2:
 		printf("Concepto: No aprobado.\n");
 		break;
-	
+
 	default:
 		break;
 	}
@@ -393,7 +394,8 @@ void imprimir_concepto(int concepto){
  * @brief Probar peticion
  * 
  */
-void porbar_antcom(){
+void porbar_antcom()
+{
 	strcpy(result4_jd->codigo, "001");
 	strcpy(result4_jd->modalidad, "Aprobado");
 	strcpy(result4_jd->titulo, "titulo");
@@ -403,9 +405,9 @@ void porbar_antcom(){
 	strcpy(result4_jd->co_director, "codir");
 	strcpy(result4_jd->fecha_registro, "fr");
 	strcpy(result4_jd->fecha_aprobacion, "fApro");
-	result4_jd->concepto= 1;
-	result4_jd->estado=1;
-	result4_jd->numero_revision= 1;
+	result4_jd->concepto = 1;
+	result4_jd->estado = 1;
+	result4_jd->numero_revision = 1;
 	strcpy(result4_jd->codigo_anteproyecto, "001");
 	strcpy(result4_jd->nombre_evaluador1, "ev1");
 	strcpy(result4_jd->concepto_evaluador1, "conev1");
@@ -421,8 +423,8 @@ void buscar_anteproyectos_jd(char *user)
 	scanf("%s", buscar_anteproyecto_jd_1_arg);
 
 	result4_jd = buscar_anteproyecto_jd_1(&buscar_anteproyecto_jd_1_arg, clnt_jd);
-	
-	// porbar_antcom(); //TODO Eliminar antes de entrea 
+
+	// porbar_antcom(); //TODO Eliminar antes de entrea
 
 	if (result4_jd == (anteproyecto_completo_jd *)NULL)
 	{
@@ -460,12 +462,12 @@ void buscar_anteproyectos_jd(char *user)
 
 		printf("Fecha Revision 1: %s\n", result4_jd->fecha_revision1);
 		printf("Fecha Revision 2: %s\n", result4_jd->fecha_revision2);
-
 	}
 	espera();
 }
 void listar_anteproyectos(char *user)
 {
+	limpiar();
 	//estudiante direactor
 	result2_ed = listar_anteproyectos_ed_1((void *)&listar_anteproyectos_ed_1_arg, clnt_ed);
 	if (result2_ed == (nodo_anteproyecto_ed *)NULL)
@@ -479,7 +481,7 @@ void listar_anteproyectos(char *user)
 		printf("\n Listado de Anteproyectos \n");
 		while ((result2_ed) != NULL)
 		{
-			printf("\n\t\tAnteproyectos %i\n ", i + 1);
+			printf("\n\t\tAnteproyectos %i\n", i + 1);
 			printf("Código: %s \n", result2_ed->codigo);
 			printf("Titulo: %s \n", result2_ed->titulo);
 
@@ -491,9 +493,11 @@ void listar_anteproyectos(char *user)
 			printf("No existen anteproyectos registrados. \n");
 		}
 	}
+	espera();
 }
 
-void datos_modificar_concepto(){
+void datos_modificar_concepto()
+{
 	limpiar();
 	printf("\t\tModificar concepto proyecto\n\n");
 	printf("Codigo proytecto: ");
@@ -506,9 +510,12 @@ void modificar_concepto_jd(char *user)
 	modificar_concepto_anteproyecto_jd_1_arg = (datos_concepto_jd *)malloc(sizeof(datos_concepto_jd));
 	datos_modificar_concepto();
 	result5_jd = modificar_concepto_anteproyecto_jd_1(modificar_concepto_anteproyecto_jd_1_arg, clnt_jd);
-	if (result5_jd == (char **) NULL) {
-		clnt_perror (clnt_jd, "call failed");
-	}else{
+	if (result5_jd == (char **)NULL)
+	{
+		clnt_perror(clnt_jd, "call failed");
+	}
+	else
+	{
 		printf("Se ha modificado el concepto!\n");
 		espera();
 	}
@@ -704,7 +711,8 @@ void iniciar_sesion()
 		{
 			clnt_perror(clnt_is, "call failed");
 			espera();
-		}else if (iniciar_sesiones(*result1_is, datos_usuario.nom_user) == -1)
+		}
+		else if (iniciar_sesiones(*result1_is, datos_usuario.nom_user) == -1)
 		{
 			printf("Datos incorrectos..\n");
 
