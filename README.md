@@ -1,4 +1,6 @@
 # Sistemas-Distribuidos--Sun-RPC
+Daniel Dorado - Carlos Chapid.
+
 Trabajo de Sistemas Distribuidos utilizando Sun - RPC
 
 Para su perfecto funcionamiento se debe tener creados los archivosr:
