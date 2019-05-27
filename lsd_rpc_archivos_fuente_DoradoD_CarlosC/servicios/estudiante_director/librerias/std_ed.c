@@ -40,7 +40,7 @@ anteproyecto_ed * draft_null(){
 
 	strcpy(draft->modalidad,"");
 	strcpy(draft->titulo,"");
-	strcpy(draft->codigo,"");
+	strcpy(draft->codigo,"-1");
 	strcpy(draft->nombre_estud1,"");
 	strcpy(draft->nombre_estud2,"");
 	strcpy(draft->director,"");
@@ -101,7 +101,7 @@ nodo_anteproyecto_ed * node_draft_null(){
 	draft=(prox_nodo_anteproyecto_ed)malloc(sizeof(nodo_anteproyecto_ed));
 
 	strcpy(draft->titulo,"");
-	strcpy(draft->codigo,"");
+	strcpy(draft->codigo,"-1");
 	draft->nodo_siguiente=NULL;
 
 	return draft;

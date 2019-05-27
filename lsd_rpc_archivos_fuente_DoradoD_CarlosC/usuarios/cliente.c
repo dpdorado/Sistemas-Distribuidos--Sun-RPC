@@ -13,23 +13,18 @@
 #include <string.h>
 #include <time.h>
 
-/*Colocar los clinetes de forma global??????*/
-/*-------------------------------Variables globales------------------*/
+/*********************************************************************Variables globales************************************************************/
 char *host;
 
-//----Inicio de Sesion.
+//-------------------Inicio de Sesion.
 CLIENT *clnt_is;
 int *result1_is;
 datos_login_is datos_usuario;
 
 char **result2_is;
 datos_cambio_contrsenia_is datos_cambio_contrasenia_is;
-/*//utilizar para el cambio de contrasenia<----------------------se debe copiar de todos los demas clinetes tambien
-result_2 = cabiar_contrasenia_is_1(&datos_cambio_contrasenia_is, clnt);
-	if (result_2 == (char **) NULL) {
-		clnt_perror (clnt, "call failed");
-}*/
-//----Jefe de Departamento
+
+//-------------------Jefe de Departamento
 CLIENT *clnt_jd;
 char **result1_jd;
 usuario_jd *datos_reg_user;
@@ -41,13 +36,13 @@ anteproyecto_completo_jd *result4_jd;
 char *buscar_anteproyecto_jd_1_arg;
 char **result5_jd;
 datos_concepto_jd *modificar_concepto_anteproyecto_jd_1_arg;
-//----Estudiante- Director
+//--------------------Estudiante-Director
 CLIENT *clnt_ed;
 anteproyecto_ed *result1_ed;
 char *buscar_anteproyecto_ed_1_arg;
 nodo_anteproyecto_ed *result2_ed;
 char *listar_anteproyectos_ed_1_arg;
-//----Evaluadores
+//-------------------Evaluadores
 CLIENT *clnt_e;
 char **result1_e;
 datos_concepto_e ingresar_concepto_anteproyecto_e_1_arg;
@@ -84,6 +79,7 @@ void crear_clientes()
 		exit(1);
 	}
 }
+//Destruir clientes
 void destruir_clientes()
 {
 	//Inicio de sesio
@@ -96,7 +92,7 @@ void destruir_clientes()
 	clnt_destroy(clnt_e);
 }
 
-/*--------------------------------Metodos genericos--------------------------------*/
+/**********************************************************************Metodos genericos************************************************************/
 /**
  * @brief Permite al usuario ingresar una opcion.
  * 
@@ -147,7 +143,149 @@ void mostrar_usuario(char *user)
 {
 	printf(">>>>%s\n", user);
 }
-/*----------------------------Menu del Jefe de Departamento-------------------------*/
+
+void imprimir_estado(int estado)
+{
+	switch (estado)
+	{
+	case 1:
+		printf("Estado: Sin asignación\n");
+		/* code */
+		break;
+	case 2:
+		printf("Estado: Evaluadores asignados\n");
+		/* code */
+		break;
+	case 3:
+		printf("Estado: En revisión\n");
+		/* code */
+		break;
+	case 4:
+		printf("Estado: Evaluado\n");
+		/* code */
+		break;
+
+	default:
+		break;
+	}
+}
+
+void imprimir_concepto(int concepto)
+{
+	switch (concepto)
+	{
+	case 1:
+		printf("Concepto: Aprobado.\n");
+		break;
+	case 2:
+		printf("Concepto: No aprobado.\n");
+		break;
+
+	default:
+		break;
+	}
+}
+/**********************************************************************************Estudiante -Director**********************************************/
+void menu_ed(char *user)
+{
+	limpiar();
+	printf("************Estudiante-Director*************\n");
+	mostrar_usuario(user);
+	printf("   1. Buscar anteproyecto.\n");
+	printf("   2. Listar anteproyectos.\n");
+	printf("   3.cerrar Sesion.\n");
+}
+void listar_anteproyectos(char *user)
+{
+	int i = 0;
+	limpiar();
+	//estudiante direactor
+	result2_ed = listar_anteproyectos_ed_1((void *)&listar_anteproyectos_ed_1_arg, clnt_ed);
+	if (result2_ed == (nodo_anteproyecto_ed *)NULL)
+	{
+		clnt_perror(clnt_ed, "call failed");
+	}
+
+	else if (strcmp(result2_ed->codigo,"-1")!=0){
+		
+		printf("\n Listado de Anteproyectos \n");
+		while (result2_ed != NULL)
+		{
+			printf("\n\t\tAnteproyecto%i\n", i + 1);
+			printf("Código: %s \n", result2_ed->codigo);
+			printf("Titulo: %s \n", result2_ed->titulo);
+
+			result2_ed = result2_ed->nodo_siguiente;
+			i++;
+		}
+		
+	}
+	if (i == 0){
+		printf("No existen anteproyectos registrados. \n");
+	}
+	espera();
+}
+
+void buscar_anteproyecto(char *user)
+{
+	limpiar();
+	buscar_anteproyecto_ed_1_arg = (char *)malloc(sizeof(char *));
+	printf("\t\tBuscar anteproyecto\n\n");
+	pedir_codigo();
+	scanf("%s", buscar_anteproyecto_ed_1_arg);
+
+	result1_ed = buscar_anteproyecto_ed_1(&buscar_anteproyecto_ed_1_arg, clnt_ed);
+	if (result1_ed == (anteproyecto_ed *)NULL)
+	{
+		clnt_perror(clnt_ed, "call failed");
+	}else{
+
+		printf("\tDATOS DE ANTEPROYECTO\n\n");
+		// Datos del anteproyecto
+		printf("Codigo: %s\n", result1_ed->codigo);
+		printf("Codigo Anteproyecto: %s\n", result1_ed->codigo);
+		printf("Titulo: %s\n", result1_ed->titulo);
+		printf("Director: %s\n", result1_ed->director);
+		printf("Co-Director: %s\n", result1_ed->co_director);
+
+		// Mostrar Estado
+		imprimir_estado(result1_ed->estado);
+		printf("Fecha registro: %s\n", result1_ed->fecha_registro);
+		printf("Fecha Aprovacion: %s\n", result1_ed->fecha_aprobacion);
+		imprimir_concepto(result1_ed->concepto);
+		imprimir_estado(result1_ed->estado);
+
+		printf("Numero de revision: %d\n",result1_ed->numero_revision);
+	}
+}
+void iniciar_menu_ed(char *user)
+{
+	int opcion = 0;
+	do
+	{
+		menu_ed(user);
+		opcion = ingresar_opcion();
+		switch (opcion)
+		{
+		case 1:
+			buscar_anteproyecto(user);
+			break;
+		case 2:
+			listar_anteproyectos(user);
+			break;
+		case 3:
+			printf("regresando....\n");
+			break;
+		default:
+			printf("Opcion no valida!\n");
+		}
+		espera();
+
+	} while (opcion != 3);
+}
+
+
+/**************************************************************************Jefe de Departamento****************************************************/
 /**
  * @brief Muestra en menu destinado para el Jefe de Departamento
  * 
@@ -166,6 +304,28 @@ void menu_jd(char *user)
 	printf("   6. Modificar concepto de anteproyecto.\n");
 	printf("   7. Cerrar Sesion.\n");
 }
+
+void cambiar_contrasenia(char *user)
+{
+	limpiar();
+	printf("************Cambio de contraseña***********\n");
+	printf("Nombre de usuario:	");
+	scanf("%10s", datos_cambio_contrasenia_is.nom_user);
+	printf("Contrseña:	");
+	scanf("%10s", datos_cambio_contrasenia_is.contrasenia);
+	printf("Nueva contrseña:	");
+	scanf("%10s", datos_cambio_contrasenia_is.nueva_contrasenia);
+	
+	result2_is = cabiar_contrasenia_is_1(&datos_cambio_contrasenia_is, clnt_is);
+		if (result2_is == (char **) NULL) {
+			clnt_perror (clnt_is, "call failed");
+	}else{
+		printf("%s\n", *result2_is);
+		espera();
+	}
+}
+
+
 /**
  * @brief Permite ingresar los datos de un usuario al jefede departamento
  * 
@@ -310,7 +470,12 @@ void registrar_anteproyecto(char *user)
 	if (result2_jd == (char **)NULL)
 	{
 		clnt_perror(clnt_jd, "call failed");
+	}else
+	{
+		printf("%s\n", *result2_jd);
+		espera();
 	}
+	free(registrar_anteproyecto_jd_1_arg);
 }
 
 void pedir_datos_evaluadores()
@@ -344,78 +509,12 @@ void asignar_evaluadores(char *user)
 	}
 	else
 	{
-		printf("Se han asignado los evaluadores!\n");
+		printf("%s\n", *result3_jd);
 		espera();
 	}
+	free(asignar_evaluadores_jd_1_arg);
 }
 
-void imprimir_estado(int estado)
-{
-	switch (estado)
-	{
-	case 1:
-		printf("Estado: Sin asignación\n");
-		/* code */
-		break;
-	case 2:
-		printf("Estado: Evaluadores asignados\n");
-		/* code */
-		break;
-	case 3:
-		printf("Estado: En revisión\n");
-		/* code */
-		break;
-	case 4:
-		printf("Estado: Evaluado\n");
-		/* code */
-		break;
-
-	default:
-		break;
-	}
-}
-
-void imprimir_concepto(int concepto)
-{
-	switch (concepto)
-	{
-	case 1:
-		printf("Concepto: Aprobado.\n");
-		break;
-	case 2:
-		printf("Concepto: No aprobado.\n");
-		break;
-
-	default:
-		break;
-	}
-}
-/**
- * @brief Probar peticion
- * 
- */
-void porbar_antcom()
-{
-	strcpy(result4_jd->codigo, "001");
-	strcpy(result4_jd->modalidad, "Aprobado");
-	strcpy(result4_jd->titulo, "titulo");
-	strcpy(result4_jd->nombre_estud1, "e1");
-	strcpy(result4_jd->nombre_estud2, "e2");
-	strcpy(result4_jd->director, "dir");
-	strcpy(result4_jd->co_director, "codir");
-	strcpy(result4_jd->fecha_registro, "fr");
-	strcpy(result4_jd->fecha_aprobacion, "fApro");
-	result4_jd->concepto = 1;
-	result4_jd->estado = 1;
-	result4_jd->numero_revision = 1;
-	strcpy(result4_jd->codigo_anteproyecto, "001");
-	strcpy(result4_jd->nombre_evaluador1, "ev1");
-	strcpy(result4_jd->concepto_evaluador1, "conev1");
-	strcpy(result4_jd->fecha_revision1, "fechaR1");
-	strcpy(result4_jd->nombre_evaluador2, "ev2");
-	strcpy(result4_jd->concepto_evaluador2, "conev2");
-	strcpy(result4_jd->fecha_revision2, "fechaR2");
-}
 void buscar_anteproyectos_jd(char *user)
 {
 	pedir_codigo();
@@ -431,7 +530,7 @@ void buscar_anteproyectos_jd(char *user)
 		clnt_perror(clnt_jd, "call failed");
 		// printf("Error\n");
 	}
-	else if (*(result4_jd)->codigo == -1)
+	else if (strcmp(result4_jd->codigo,"-1") == 0)
 	{
 		printf("No se encontro ningun anteproyecto con ese codigo!\n");
 	}
@@ -465,45 +564,22 @@ void buscar_anteproyectos_jd(char *user)
 	}
 	espera();
 }
-void listar_anteproyectos(char *user)
-{
-	limpiar();
-	//estudiante direactor
-	result2_ed = listar_anteproyectos_ed_1((void *)&listar_anteproyectos_ed_1_arg, clnt_ed);
-	if (result2_ed == (nodo_anteproyecto_ed *)NULL)
-	{
-		clnt_perror(clnt_ed, "call failed");
-	}
-	else
-	{
-		int i = 0;
-
-		printf("\n Listado de Anteproyectos \n");
-		while ((result2_ed) != NULL)
-		{
-			printf("\n\t\tAnteproyectos %i\n", i + 1);
-			printf("Código: %s \n", result2_ed->codigo);
-			printf("Titulo: %s \n", result2_ed->titulo);
-
-			result2_ed = result2_ed->nodo_siguiente;
-			i++;
-		}
-		if (i == 0)
-		{
-			printf("No existen anteproyectos registrados. \n");
-		}
-	}
-	espera();
-}
 
 void datos_modificar_concepto()
 {
+	int opcion;
+	char concepto[20];
 	limpiar();
-	printf("\t\tModificar concepto proyecto\n\n");
-	printf("Codigo proytecto: ");
+	printf("\t\tModificar concepto anteproyecto\n\n");
+	printf("Codigo: ");
 	scanf("%3s", modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
-	printf("Codigo proytecto: ");
-	scanf("%20s", modificar_concepto_anteproyecto_jd_1_arg->concepto);
+	printf("Concepto: ");
+	do{
+		printf("1. Aprobado 	2. No aprobado\n");
+		opcion = ingresar_opcion();
+		
+	}while(opcion != 1 && opcion!=2);
+	strcpy(modificar_concepto_anteproyecto_jd_1_arg->concepto,(opcion==1?"APROBADO":"NO_APROBADO"));
 }
 void modificar_concepto_jd(char *user)
 {
@@ -516,14 +592,12 @@ void modificar_concepto_jd(char *user)
 	}
 	else
 	{
-		printf("Se ha modificado el concepto!\n");
+		printf("%s\n", *result5_jd);
 		espera();
 	}
+	free(modificar_concepto_anteproyecto_jd_1_arg);
 }
-void cambiar_contrasenia(char *user)
-{
-	//inicio de sesion
-}
+
 void iniciar_menu_jd(char *user)
 {
 	int opcion = 0;
@@ -551,71 +625,22 @@ void iniciar_menu_jd(char *user)
 		case 6:
 			modificar_concepto_jd(user);
 			break;
+		
 		case 7:
+			cambiar_contrasenia(user);
+			break; 
+		case 8:
 			printf("regresando....\n");
 			break;
 
-		/* case 8:
-			cambiar_contrasenia(user);
-			break; */
 		default:
 			printf("Opcion no valida!\n");
 			espera();
 		}
-	} while (opcion != 7);
+	} while (opcion != 8);
 }
 
-/*----------------------------Estudiante -Director-------------------------*/
-void menu_ed(char *user)
-{
-	limpiar();
-	printf("************Estudiante-Director*************\n");
-	mostrar_usuario(user);
-	printf("   1. Buscar anteproyecto.\n");
-	printf("   2. Listar anteproyectos.\n");
-	printf("   3.cerrar Sesion.\n");
-}
-
-void buscar_anteproyecto(char *user)
-{
-	limpiar();
-	buscar_anteproyecto_ed_1_arg = (char *)malloc(sizeof(char *));
-	printf("\t\tBuscar anteproyecto\n\n");
-	pedir_codigo();
-	scanf("%s", buscar_anteproyecto_ed_1_arg);
-
-	result1_ed = buscar_anteproyecto_ed_1(&buscar_anteproyecto_ed_1_arg, clnt_ed);
-	if (result1_ed == (anteproyecto_ed *)NULL)
-	{
-		clnt_perror(clnt_ed, "call failed");
-	}
-}
-void iniciar_menu_ed(char *user)
-{
-	int opcion = 0;
-	do
-	{
-		menu_ed(user);
-		opcion = ingresar_opcion();
-		switch (opcion)
-		{
-		case 1:
-			buscar_anteproyecto(user);
-			break;
-		case 2:
-			//listar_anteproyectos(user);
-			break;
-		case 3:
-			printf("regresando....\n");
-			break;
-		default:
-			printf("Opcion no valida!\n");
-		}
-		espera();
-
-	} while (opcion != 3);
-}
-/*----------------------------Evaluadores-------------------------*/
+/***********************************************************************Evaluadores******************************************************************/
 void menu_e(char *user)
 {
 	limpiar();
@@ -626,8 +651,46 @@ void menu_e(char *user)
 	printf("   3. Modificar concepto de anteproyecto.\n");
 	printf("   4.cerrar Sesion.\n");
 }
+void datos_modificar_concepto_e(){
+	int opcion;
+	char concepto[20];
+	limpiar();
+	printf("\t\tModificar concepto anteproyecto\n\n");
+	printf("Codigo: ");
+	scanf("%3s", ingresar_concepto_anteproyecto_e_1_arg.codigo_proyecto);
+	printf("Concepto: ");
+	do{
+		printf("1. Aprobado 	2. No aprobado\n");
+		opcion = ingresar_opcion();
+		
+	}while(opcion != 1 && opcion!=2);
+	strcpy(ingresar_concepto_anteproyecto_e_1_arg.concepto,(opcion==1?"APROBADO":"NO_APROBADO"));
+	printf("Fecha: ");
+	scanf("%10s", ingresar_concepto_anteproyecto_e_1_arg.fecha);
+	
+
+	printf("Numero de evaluador: ");
+	do{
+		printf("1. Primero 	2. Segundo\n");
+		opcion = ingresar_opcion();
+		
+	}while(opcion != 1 && opcion != 2);
+	ingresar_concepto_anteproyecto_e_1_arg.eval_numero=opcion;
+}
 void modificar_concepto_e(char *user)
 {
+	//ingresar_concepto_anteproyecto_e_1_arg = (datos_concepto_e *)malloc(sizeof(datos_concepto_e));
+	datos_modificar_concepto_e();
+	result1_e = ingresar_concepto_anteproyecto_e_1(&ingresar_concepto_anteproyecto_e_1_arg, clnt_e);
+	if (result1_e == (char **)NULL)
+	{
+		clnt_perror(clnt_e, "call failed");
+	}
+	else
+	{
+		printf("%s\n", *result1_e);
+		espera();
+	}
 }
 void iniciar_menu_e(char *user)
 {
@@ -639,13 +702,13 @@ void iniciar_menu_e(char *user)
 		switch (opcion)
 		{
 		case 1:
-			//buscar_anteproyecto(user);
+			buscar_anteproyecto(user);
 			break;
 		case 2:
-			//listar_anteproyectos(user);
+			listar_anteproyectos(user);
 			break;
 		case 3:
-			//modificar_concepto_e(user);
+			modificar_concepto_e(user);
 			break;
 		case 4:
 			printf("regresando....\n");
@@ -656,7 +719,7 @@ void iniciar_menu_e(char *user)
 		}
 	} while (opcion != 4);
 }
-/*----------------------------Inicio de sesion-------------------------------------*/
+/***********************************************************************Inicio de sesion**********************************************************/
 //Muestra el menu de sesion.
 void menu_sesion()
 {
@@ -710,36 +773,26 @@ void iniciar_sesion()
 		if (result1_is == (int *)NULL)
 		{
 			clnt_perror(clnt_is, "call failed");
-			espera();
+		espera();
 		}
-		else if (iniciar_sesiones(*result1_is, datos_usuario.nom_user) == -1)
-		{
-			printf("Datos incorrectos..\n");
-
+		else if (iniciar_sesiones(*result1_is, datos_usuario.nom_user) == -1){
 			printf("1-> volver a intentarlo\n");
 			printf("2-> regresar\n");
 			bandera = ingresar_opcion();
-			//scanf("%d",&bandera);
-		}
-		/* else if (iniciar_sesiones(2, "dodaniel") == -1)
-		{
-			printf("Datos incorrectos..\n");
-
-			printf("1-> volver a intentarlo\n");
-			printf("2-> regresar\n");
-			bandera = ingresar_opcion();
-		} */
-		else
-		{
+		}else{
 			printf("Inicio correcto\n");
+			bandera=2;
 		}
 
 		strcpy(datos_usuario.nom_user, "");
 		strcpy(datos_usuario.contrasenia, "");
 	} while (bandera == 1);
+	free(result1_is);
 }
 
-/*----------------------------Inicio-----------------------------------------------*/
+
+
+/*****************************************************************************Inicio***************************************************************/
 void prog_servicio()
 {
 	crear_clientes();

@@ -250,7 +250,7 @@ anteproyecto_jd * draft_null(){
 
 	strcpy(draft->modalidad,"");
 	strcpy(draft->titulo,"");
-	strcpy(draft->codigo,"");
+	strcpy(draft->codigo,"-1");
 	strcpy(draft->nombre_estud1,"");
 	strcpy(draft->nombre_estud2,"");
 	strcpy(draft->director,"");
@@ -297,7 +297,7 @@ evaluadores_jd * eval_null(){
 	
 	eval=(evaluadores_jd*)malloc(sizeof(evaluadores_jd));
 
-	strcpy(eval->codigo_anteproyecto,"");
+	strcpy(eval->codigo_anteproyecto,"-1");
 	strcpy(eval->nombre_evaluador1,"");
 	strcpy(eval->concepto_evaluador1,"");
 	strcpy(eval->fecha_revision1,"");
