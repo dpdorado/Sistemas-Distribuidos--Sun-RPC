@@ -52,8 +52,8 @@ typedef struct nodo_anteproyecto_ed nodo_anteproyecto_ed;
 extern  anteproyecto_ed * buscar_anteproyecto_ed_1(char **, CLIENT *);
 extern  anteproyecto_ed * buscar_anteproyecto_ed_1_svc(char **, struct svc_req *);
 #define listar_anteproyectos_ed 2
-extern  nodo_anteproyecto_ed * listar_anteproyectos_ed_1(void *, CLIENT *);
-extern  nodo_anteproyecto_ed * listar_anteproyectos_ed_1_svc(void *, struct svc_req *);
+extern  prox_nodo_anteproyecto_ed * listar_anteproyectos_ed_1(void *, CLIENT *);
+extern  prox_nodo_anteproyecto_ed * listar_anteproyectos_ed_1_svc(void *, struct svc_req *);
 extern int estudiante_director_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
@@ -61,8 +61,8 @@ extern int estudiante_director_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 extern  anteproyecto_ed * buscar_anteproyecto_ed_1();
 extern  anteproyecto_ed * buscar_anteproyecto_ed_1_svc();
 #define listar_anteproyectos_ed 2
-extern  nodo_anteproyecto_ed * listar_anteproyectos_ed_1();
-extern  nodo_anteproyecto_ed * listar_anteproyectos_ed_1_svc();
+extern  prox_nodo_anteproyecto_ed * listar_anteproyectos_ed_1();
+extern  prox_nodo_anteproyecto_ed * listar_anteproyectos_ed_1_svc();
 extern int estudiante_director_1_freeresult ();
 #endif /* K&R C */
 

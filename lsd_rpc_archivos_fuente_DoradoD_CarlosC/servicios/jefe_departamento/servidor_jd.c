@@ -6,6 +6,10 @@
 
 #include "servicios_jd.h"
 #include "./librerias/std_jd.h"
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 char **
 registrar_usuario_jd_1_svc(usuario_jd *argp, struct svc_req *rqstp)
@@ -23,7 +27,17 @@ char **
 registrar_anteproyecto_jd_1_svc(anteproyecto_jd *argp, struct svc_req *rqstp)
 {
 	static char * result;
-	printf("%s\n",argp->codigo);
+	// Generamos un código aleatorio
+	
+	int code=0;
+	char* codigo;
+	code=rand()%901+100;
+	codigo=(char*)malloc(sizeof(char)*3);	
+
+	sprintf(codigo,"%d",code);	
+
+	strcpy(argp->codigo,codigo);
+
 	result=(char*)malloc(sizeof(char)*50);
 	
 	strcpy(result,register_draft(argp, "./informacion/anteproyectos.dat"));
@@ -61,11 +75,13 @@ modificar_concepto_anteproyecto_jd_1_svc(datos_concepto_jd *argp, struct svc_req
 	static char * result;
 	int concept=0;
 	
-	if (strcmp("APROBADO", argp->concepto)==0){
+	if (strcmp("1", argp->concepto)==0){
 		concept=1;
-	}else if(strcmp("NO_APROBADO", argp->concepto)==0){
+	}else if(strcmp("2", argp->concepto)==0){
 		concept=2;
-	}	
+	}
+	printf("codigo: %s\n",argp->codigo_proyecto);
+	printf("concepto: %s\n",argp->concepto);	
 	
 	result=(char*)malloc(sizeof(char)*50);
 	

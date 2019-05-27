@@ -39,7 +39,7 @@ estudiante_director_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case listar_anteproyectos_ed:
 		_xdr_argument = (xdrproc_t) xdr_void;
-		_xdr_result = (xdrproc_t) xdr_nodo_anteproyecto_ed;
+		_xdr_result = (xdrproc_t) xdr_prox_nodo_anteproyecto_ed;
 		local = (char *(*)(char *, struct svc_req *)) listar_anteproyectos_ed_1_svc;
 		break;
 

@@ -14,7 +14,7 @@ anteproyecto_ed * search_draft(char* code, char* path_draft);
 anteproyecto_ed * draft_null();
 
 //Listar anteproyectos
-nodo_anteproyecto_ed * list_draft(char* path_draft);
+prox_nodo_anteproyecto_ed * list_draft(char* path_draft);
 
 //Cabeza de la lista sin infoemación
 nodo_anteproyecto_ed * node_draft_null();

@@ -10,6 +10,8 @@
 anteproyecto_ed * search_draft(char* code, char* path_draft){
 	anteproyecto_ed *draft; 	
 	FILE *file;
+
+	printf("buscando codigo\n");
 	
 	file=fopen(path_draft,"rb");
 	if (file==NULL){
@@ -19,8 +21,10 @@ anteproyecto_ed * search_draft(char* code, char* path_draft){
 	draft=(anteproyecto_ed*)malloc(sizeof(anteproyecto_ed));
 	
 	fread(draft, sizeof(anteproyecto_ed), 1, file);
+	
 
 	while(!feof(file)){
+		printf("Codigo: %s\n",draft->codigo);
 		if (strcmp(code,draft->codigo)==0){
 			fclose(file);
 			return draft;
@@ -55,7 +59,7 @@ anteproyecto_ed * draft_null(){
 } 
 
 //Listar anteproyectos
-nodo_anteproyecto_ed * list_draft(char* path_draft){
+prox_nodo_anteproyecto_ed * list_draft(char* path_draft){
 	anteproyecto_ed *draft; 	
 	FILE *file;
 	static prox_nodo_anteproyecto_ed cabeza = NULL;
@@ -64,7 +68,7 @@ nodo_anteproyecto_ed * list_draft(char* path_draft){
 	
 	file=fopen(path_draft,"rb");
 	if (file==NULL){
-		return node_draft_null();
+		return NULL;
 	}
 	
 	draft=(anteproyecto_ed*)malloc(sizeof(anteproyecto_ed));
@@ -90,11 +94,11 @@ nodo_anteproyecto_ed * list_draft(char* path_draft){
 	}
 	
 	fclose(file);
-	return cabeza;
+	return &cabeza;
 }
 //Cabeza de la lista sin infoemación
 nodo_anteproyecto_ed * node_draft_null(){
-	static nodo_anteproyecto_ed * draft;
+	nodo_anteproyecto_ed * draft;
 	
 	draft=(prox_nodo_anteproyecto_ed)malloc(sizeof(nodo_anteproyecto_ed));
 

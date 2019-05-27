@@ -13,7 +13,7 @@ estudiante_director_1(char *host)
 	CLIENT *clnt;
 	anteproyecto_ed  *result_1;
 	char * buscar_anteproyecto_ed_1_arg;
-	nodo_anteproyecto_ed  *result_2;
+	prox_nodo_anteproyecto_ed  *result_2;
 	char *listar_anteproyectos_ed_1_arg;
 
 #ifndef	DEBUG
@@ -29,7 +29,7 @@ estudiante_director_1(char *host)
 		clnt_perror (clnt, "call failed");
 	}
 	result_2 = listar_anteproyectos_ed_1((void*)&listar_anteproyectos_ed_1_arg, clnt);
-	if (result_2 == (nodo_anteproyecto_ed *) NULL) {
+	if (result_2 == (prox_nodo_anteproyecto_ed *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
 #ifndef	DEBUG

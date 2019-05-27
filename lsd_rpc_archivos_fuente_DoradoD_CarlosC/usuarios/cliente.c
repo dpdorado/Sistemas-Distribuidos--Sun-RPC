@@ -29,7 +29,7 @@ CLIENT *clnt_jd;
 char **result1_jd;
 usuario_jd *datos_reg_user;
 char **result2_jd;
-anteproyecto_jd *registrar_anteproyecto_jd_1_arg;
+anteproyecto_jd registrar_anteproyecto_jd_1_arg;
 char **result3_jd;
 evaluadores_jd *asignar_evaluadores_jd_1_arg;
 anteproyecto_completo_jd *result4_jd;
@@ -40,7 +40,7 @@ datos_concepto_jd *modificar_concepto_anteproyecto_jd_1_arg;
 CLIENT *clnt_ed;
 anteproyecto_ed *result1_ed;
 char *buscar_anteproyecto_ed_1_arg;
-nodo_anteproyecto_ed *result2_ed;
+prox_nodo_anteproyecto_ed *result2_ed;
 char *listar_anteproyectos_ed_1_arg;
 //-------------------Evaluadores
 CLIENT *clnt_e;
@@ -201,21 +201,21 @@ void listar_anteproyectos(char *user)
 	limpiar();
 	//estudiante direactor
 	result2_ed = listar_anteproyectos_ed_1((void *)&listar_anteproyectos_ed_1_arg, clnt_ed);
-	if (result2_ed == (nodo_anteproyecto_ed *)NULL)
+	if (result2_ed == (prox_nodo_anteproyecto_ed *)NULL)
 	{
 		clnt_perror(clnt_ed, "call failed");
 	}
-	else if (strcmp(result2_ed->codigo,"-1")!=0){
+	else if (strcmp((*result2_ed)->codigo,"-1")!=0){
 		
 		printf("\n**********Listado de Anteproyectos**********\n");
 		mostrar_usuario(user);		
-		while (result2_ed != NULL)
+		while ((*result2_ed) != NULL)
 		{
 			printf("\n\t\tAnteproyecto %i\n", i + 1);
-			printf("Código: %s \n", result2_ed->codigo);
-			printf("Titulo: %s \n", result2_ed->titulo);
+			printf("Código: %s \n", (*result2_ed)->codigo);
+			printf("Titulo: %s \n", (*result2_ed)->titulo);
 
-			result2_ed = result2_ed->nodo_siguiente;
+			(*result2_ed) = (*result2_ed)->nodo_siguiente;
 			i++;
 		}
 		
@@ -374,12 +374,6 @@ void pedir_datos_usuario(char *user)
 
 	} while (tipo != 1 && tipo != 2 && tipo != 3);
 	datos_reg_user->tipo_user = tipo;
-	
-	/* printf("id: %s \n", datos_reg_user->identificacion);
-	printf("NombreApellido %s \n", datos_reg_user->nombre_apellido);
-	printf("NombreUser %s \n", datos_reg_user->nom_user);
-	printf("Pass %s \n", datos_reg_user->contrasenia);
-	printf("Tipo %d \n", datos_reg_user->tipo_user); */
 }
 
 //Logica para registrarun usuario
@@ -409,71 +403,55 @@ void pedir_datos_anteproyecto(char *user)
 	int aux=0;
 
 	//hacer validaciones al ingresar datos
-	registrar_anteproyecto_jd_1_arg = (anteproyecto_jd *)malloc(sizeof(anteproyecto_jd));
+	//registrar_anteproyecto_jd_1_arg = (anteproyecto_jd *)malloc(sizeof(anteproyecto_jd));
 	limpiar();
 	mostrar_usuario(user);
-
-	// Generamos un código aleatorio
-	srand(time(NULL));
-	char c[4];
-	c[3]='\n';
-	for (int i = 0; i < 3; i++)
-	{
-		c[i] = '0' + (rand() % 10);
-	}
-	
-	printf("%s\n",c);
-	//strcpy(code,c);
-	
-	//code_p=rand()%901+100;
-	//sprintf(code,"%d",code_p);
-	//printf("%s\n",code);
-	
 	
 	do{
 		printf("Modalidad: \n");
 		printf("1. Trabajo de investigación.		2. Practica profesional :");
 		scanf("%d",&aux);
+		limpiar_buffer();
 	}while(aux!=1 && aux!=2);
 
-	strcpy(registrar_anteproyecto_jd_1_arg->modalidad,(aux==1?"T.I":"P.P"));
+	strcpy(registrar_anteproyecto_jd_1_arg.modalidad,(aux==1?"T.I":"P.P"));
 	limpiar_buffer();
 
 	printf("Título: ");
-	scanf("%40s", registrar_anteproyecto_jd_1_arg->titulo);
+	scanf("%40s", registrar_anteproyecto_jd_1_arg.titulo);
 	limpiar_buffer();
 	
-	strcpy(registrar_anteproyecto_jd_1_arg->codigo, c);
+	strcpy(registrar_anteproyecto_jd_1_arg.codigo, "");
 	limpiar_buffer();
 
 	printf("Estudiante 1: ");
-	scanf("%30s", registrar_anteproyecto_jd_1_arg->nombre_estud1);
+	scanf("%30s", registrar_anteproyecto_jd_1_arg.nombre_estud1);
 	limpiar_buffer();
 
 	printf("Estudiante 2: ");
-	scanf("%30s", registrar_anteproyecto_jd_1_arg->nombre_estud2);
+	scanf("%30s", registrar_anteproyecto_jd_1_arg.nombre_estud2);
 	limpiar_buffer();
 
 	printf("Director: ");
-	scanf("%30s", registrar_anteproyecto_jd_1_arg->director);
+	scanf("%30s", registrar_anteproyecto_jd_1_arg.director);
 	limpiar_buffer();
 
 	printf("Co-Director: ");
-	scanf("%30s", registrar_anteproyecto_jd_1_arg->co_director);
+	scanf("%30s", registrar_anteproyecto_jd_1_arg.co_director);
 	limpiar_buffer();
 
 	printf("Fecha de registro: ");
-	scanf("%10s", registrar_anteproyecto_jd_1_arg->fecha_registro);
+	scanf("%10s", registrar_anteproyecto_jd_1_arg.fecha_registro);
 	limpiar_buffer();
 
 	printf("Fecha de aprobacion: ");
-	scanf("%12s", registrar_anteproyecto_jd_1_arg->fecha_aprobacion);
+	scanf("%12s", registrar_anteproyecto_jd_1_arg.fecha_aprobacion);
 	limpiar_buffer();
 
 	// Valores por defecto
-	registrar_anteproyecto_jd_1_arg->concepto = 2;
-	registrar_anteproyecto_jd_1_arg->estado = 1;
-	registrar_anteproyecto_jd_1_arg->numero_revision = 0;
+	registrar_anteproyecto_jd_1_arg.concepto = 2;
+	registrar_anteproyecto_jd_1_arg.estado = 1;
+	registrar_anteproyecto_jd_1_arg.numero_revision = 0;
 
 }
 /**
@@ -484,7 +462,7 @@ void pedir_datos_anteproyecto(char *user)
 void registrar_anteproyecto(char *user)
 {
 	pedir_datos_anteproyecto(user);
-	result2_jd = registrar_anteproyecto_jd_1(registrar_anteproyecto_jd_1_arg, clnt_jd);
+	result2_jd = registrar_anteproyecto_jd_1(&registrar_anteproyecto_jd_1_arg, clnt_jd);
 	if (result2_jd == (char **)NULL)
 	{
 		clnt_perror(clnt_jd, "call failed");
@@ -540,8 +518,6 @@ void buscar_anteproyectos_jd(char *user)
 
 	result4_jd = buscar_anteproyecto_jd_1(&buscar_anteproyecto_jd_1_arg, clnt_jd);
 
-	// porbar_antcom(); //TODO Eliminar antes de entrea
-
 	if (result4_jd == (anteproyecto_completo_jd *)NULL)
 	{
 		clnt_perror(clnt_jd, "call failed");
@@ -589,14 +565,20 @@ void datos_modificar_concepto()
 	limpiar();
 	printf("****Modificar concepto anteproyecto****\n");
 	printf("Codigo: ");
-	scanf("%6s", modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
+	scanf("%3s", modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
+	limpiar_buffer();
+	printf("--:%s\n",modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
 	printf("Concepto: ");
 	do{
 		printf("1. Aprobado 	2. No aprobado\n");
 		opcion = ingresar_opcion();
+		limpiar_buffer();
 		
 	}while(opcion != 1 && opcion!=2);
-	strcpy(modificar_concepto_anteproyecto_jd_1_arg->concepto,(opcion==1?"APROBADO":"NO_APROBADO"));
+	printf("--:%s\n",modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
+	//sprintf(modificar_concepto_anteproyecto_jd_1_arg->concepto,"%d",opcion);	
+	strcpy(modificar_concepto_anteproyecto_jd_1_arg->concepto,(opcion==1?"1":"2"));
+	printf("--:%s\n",modificar_concepto_anteproyecto_jd_1_arg->codigo_proyecto);
 }
 void modificar_concepto_jd(char *user)
 {
@@ -719,6 +701,7 @@ void iniciar_menu_e(char *user)
 		{
 		case 1:
 			buscar_anteproyecto(user);
+			espera();
 			break;
 		case 2:
 			listar_anteproyectos(user);

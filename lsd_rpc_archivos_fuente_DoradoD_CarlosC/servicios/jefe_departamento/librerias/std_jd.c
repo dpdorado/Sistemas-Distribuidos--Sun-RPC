@@ -310,6 +310,8 @@ char * modify_concept_draft(char* code, int concept, char* path_draft){
 	anteproyecto_jd *draft;
 	FILE *file;
 
+	printf("Modificando concepto.\n");
+
 	messaje = (char*)malloc(sizeof(char)*50);
 	strcpy(messaje,"Concepto no modificado.");
 	
@@ -323,6 +325,7 @@ char * modify_concept_draft(char* code, int concept, char* path_draft){
 	fread(draft, sizeof(anteproyecto_jd), 1, file);
 
 	while(!feof(file)){
+		printf("--codigo: %s\n",draft->codigo);
 		if (strcmp(code,draft->codigo)==0){
 			int pos = ftell(file)-sizeof(anteproyecto_jd);
 			fseek(file,pos,SEEK_SET);

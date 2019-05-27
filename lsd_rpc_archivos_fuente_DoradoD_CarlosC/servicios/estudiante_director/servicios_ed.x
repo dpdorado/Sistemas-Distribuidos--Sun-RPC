@@ -37,6 +37,6 @@ struct nodo_anteproyecto_ed{
 program estudiante_director{
 	version estudiante_director_version{
 		anteproyecto_ed buscar_anteproyecto_ed(string codigo)=1;
-		nodo_anteproyecto_ed listar_anteproyectos_ed(void)=2;
+		prox_nodo_anteproyecto_ed listar_anteproyectos_ed(void)=2;
 	}=1;
 }=0x20000003;
